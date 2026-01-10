@@ -15,6 +15,47 @@ return {
     },
   },
 
+ -- Toggleterm: Better integrated terminal
+  {
+    'akinsho/toggleterm.nvim',
+    version = '*',
+    opts = {
+      size = 15,
+      open_mapping = [[<C-\>]],
+      direction = 'horizontal',
+      shade_terminals = true,
+      shading_factor = 2,
+      persist_size = true,
+      close_on_exit = true,
+    },
+    keys = {
+      { '<C-\\>', desc = 'Toggle terminal' },
+      { '<leader>tt', '<cmd>ToggleTerm direction=float<cr>', desc = '[T]erminal floa[t]' },
+    },
+  },
+
+  -- Diffview: Side-by-side git diffs
+  {
+    'sindrets/diffview.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    cmd = { 'DiffviewOpen', 'DiffviewFileHistory' },
+    keys = {
+      { '<leader>gd', '<cmd>DiffviewOpen<cr>', desc = '[G]it [d]iff view' },
+      { '<leader>gD', '<cmd>DiffviewFileHistory %<cr>', desc = '[G]it file history [D]iff' },
+      { '<leader>gq', '<cmd>DiffviewClose<cr>', desc = '[G]it diff [q]uit' },
+    },
+  },
+
+  -- Comment.nvim: Toggle comments with gcc
+  {
+    'numToStr/Comment.nvim',
+    opts = {},
+    keys = {
+      { 'gcc', mode = 'n', desc = 'Toggle comment line' },
+      { 'gc', mode = { 'n', 'v' }, desc = 'Toggle comment' },
+    },
+  },
+
   -- Bufferline: VS Code-like tabs at the top
   {
     'akinsho/bufferline.nvim',
@@ -56,3 +97,4 @@ return {
     end,
   },
 }
+
