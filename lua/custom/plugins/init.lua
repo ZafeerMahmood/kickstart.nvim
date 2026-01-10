@@ -15,7 +15,7 @@ return {
     },
   },
 
- -- Toggleterm: Better integrated terminal
+  -- Toggleterm: Better integrated terminal
   {
     'akinsho/toggleterm.nvim',
     version = '*',
@@ -23,6 +23,7 @@ return {
       size = 15,
       open_mapping = [[<C-\>]],
       direction = 'horizontal',
+      shell = 'pwsh -NoLogo',
       shade_terminals = true,
       shading_factor = 2,
       persist_size = true,
