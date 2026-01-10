@@ -13,6 +13,16 @@ return {
       { '<leader>gg', '<cmd>LazyGit<cr>', desc = 'Open LazyGit' },
       { '<leader>gf', '<cmd>LazyGitCurrentFile<cr>', desc = 'LazyGit current file history' },
     },
+    config = function()
+      vim.api.nvim_create_autocmd('TermOpen', {
+        pattern = '*lazygit*',
+        callback = function()
+          -- Map Esc to close lazygit (sends q to quit lazygit then closes buffer)
+          vim.keymap.set('t', '<Esc>', 'q', { buffer = true, desc = 'Close LazyGit' })
+          vim.keymap.set('t', '<Esc><Esc>', '<cmd>close<cr>', { buffer = true, desc = 'Force close LazyGit' })
+        end,
+      })
+    end,
   },
 
   -- Toggleterm: Better integrated terminal
@@ -45,6 +55,16 @@ return {
       { '<leader>gD', '<cmd>DiffviewFileHistory %<cr>', desc = '[G]it file history [D]iff' },
       { '<leader>gq', '<cmd>DiffviewClose<cr>', desc = '[G]it diff [q]uit' },
     },
+    config = function()
+      local actions = require 'diffview.actions'
+      require('diffview').setup {
+        keymaps = {
+          view = { q = actions.close },
+          file_panel = { q = actions.close },
+          file_history_panel = { q = actions.close },
+        },
+      }
+    end,
   },
 
   -- Comment.nvim: Toggle comments with gcc
