@@ -166,6 +166,12 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- Default indentation: 2 spaces (guess-indent.nvim will override per-project)
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+vim.o.softtabstop = 2
+vim.o.expandtab = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -802,20 +808,7 @@ require('lazy').setup({
     },
     opts = {
       notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
-        end
-      end,
+      format_on_save = false, -- Disabled auto-format on save; use <leader>f to format manually
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
@@ -900,7 +893,20 @@ require('lazy').setup({
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = true, auto_show_delay_ms = 100 },
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 50,
+          window = {
+            max_width = 80,         -- Wider documentation window
+            max_height = 20,       -- Taller documentation window
+          },
+          treesitter_highlighting = true, -- Use treesitter for syntax highlighting in docs
+        },
+        menu = {
+          draw = {
+            treesitter = { 'lsp' }, -- Use treesitter highlighting in completion menu
+          },
+        },
       },
 
       sources = {

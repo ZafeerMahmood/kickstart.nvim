@@ -3,6 +3,9 @@
 --
 -- See the kickstart.nvim README for more information
 return {
+  -- Decay theme
+  { 'decaycs/decay.nvim', name = 'decay', lazy = false },
+
   -- Lazygit: Full git UI inside nvim
   {
     'kdheepak/lazygit.nvim',
@@ -136,11 +139,18 @@ return {
     },
     opts = {
       terminal = {
+        -- TODO: To move Claude to bottom instead of right side, change:
+        --   split_side = 'bottom',
         split_side = 'right',
         split_width_percentage = 0.40,
         snacks_win_opts = {
           env = { SHELL = 'pwsh' },
         },
+      },
+      diff_opts = {
+        auto_close_on_accept = true,
+        vertical_split = true,
+        open_in_current_tab = false,
       },
     },
   },
