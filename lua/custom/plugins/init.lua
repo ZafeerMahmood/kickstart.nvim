@@ -124,8 +124,8 @@ return {
     dependencies = { 'folke/snacks.nvim' },
     config = true,
     keys = {
-      { '<leader>ac', '<cmd>ClaudeCode<cr>', mode = { 'n', 't' }, desc = '[A]I [C]laude toggle' },
-      { '<leader>af', '<cmd>ClaudeCodeFocus<cr>', mode = { 'n', 't' }, desc = '[A]I [F]ocus Claude' },
+      { '<leader>ac', '<cmd>ClaudeCode<cr>', mode = { 'n' }, desc = '[A]I [C]laude toggle' },
+      { '<leader>af', '<cmd>ClaudeCodeFocus<cr>', mode = { 'n' }, desc = '[A]I [F]ocus Claude' },
       { '<leader>ar', '<cmd>ClaudeCode --resume<cr>', desc = '[A]I [R]esume session' },
       { '<leader>aR', '<cmd>ClaudeCode --continue<cr>', desc = '[A]I continue (cont[R]ol)' },
       { '<leader>am', '<cmd>ClaudeCodeSelectModel<cr>', desc = '[A]I select [M]odel' },
@@ -138,6 +138,9 @@ return {
       terminal = {
         split_side = 'right',
         split_width_percentage = 0.40,
+        snacks_win_opts = {
+          env = { SHELL = 'pwsh' },
+        },
       },
     },
   },

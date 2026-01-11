@@ -713,6 +713,27 @@ require('lazy').setup({
           filetypes = { 'html', 'css', 'javascriptreact', 'typescriptreact' },
         },
 
+        -- Python LSP (auto-detects venv, .venv, env, .env folders)
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+                diagnosticMode = 'openFilesOnly', -- or 'workspace' for full project
+              },
+            },
+          },
+        },
+
+        -- Config files
+        jsonls = {},  -- JSON (package.json, tsconfig, etc.)
+        yamlls = {},  -- YAML
+        taplo = {},   -- TOML (pyproject.toml, Cargo.toml, etc.)
+
+        -- Markdown
+        marksman = {},
+
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -973,8 +994,31 @@ require('lazy').setup({
     config = function()
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
       require('nvim-treesitter').setup {
-        ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+        ensure_installed = {
+          -- Defaults
+          'bash', 'c', 'diff', 'lua', 'luadoc', 'query', 'vim', 'vimdoc',
+          -- Frontend
+          'html', 'css', 'scss', 'javascript', 'typescript', 'tsx', 'json', 'json5',
+          -- Backend
+          'python', 'go', 'gomod', 'gosum',
+          -- Config/Docs
+          'markdown', 'markdown_inline', 'yaml', 'toml', 'dockerfile',
+          -- Git
+          'gitcommit', 'gitignore',
+        },
+        -- Use prebuilt parsers on Windows to avoid compiler issues
+        install = {
+          prefer_git = false,  -- Use prebuilt binaries when available
+          compilers = { 'gcc', 'clang', 'cl' },
+        },
       }
+
+      -- Enable treesitter highlighting for all filetypes with a parser
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function()
+          pcall(vim.treesitter.start)
+        end,
+      })
     end,
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -992,7 +1036,7 @@ require('lazy').setup({
   --
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
-  --
+  -- 
   -- require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
