@@ -214,6 +214,26 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
+-- Ensure .mjs and other JS variants are recognized correctly
+vim.filetype.add {
+  extension = {
+    mjs = 'javascript',
+    cjs = 'javascript',
+  },
+  -- pattern = {
+  --   -- Storybook files
+  --   ['.*%.stories%.js'] = 'javascript',
+  --   ['.*%.stories%.ts'] = 'typescript',
+  --   ['.*%.stories%.jsx'] = 'javascriptreact',
+  --   ['.*%.stories%.tsx'] = 'typescriptreact',
+  --   -- Test files
+  --   ['.*%.test%.js'] = 'javascript',
+  --   ['.*%.test%.ts'] = 'typescript',
+  --   ['.*%.spec%.js'] = 'javascript',
+  --   ['.*%.spec%.ts'] = 'typescript',
+  -- },
+}
+
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
 --  See `:help vim.hl.on_yank()`
@@ -1012,10 +1032,10 @@ require('lazy').setup({
           -- Git
           'gitcommit', 'gitignore',
         },
-        -- Use prebuilt parsers on Windows to avoid compiler issues
+
         install = {
-          prefer_git = false,  -- Use prebuilt binaries when available
-          compilers = { 'gcc', 'clang', 'cl' },
+          prefer_git = false,
+          compilers = { 'zig', 'gcc', 'clang', 'cl' },
         },
       }
 
@@ -1025,6 +1045,7 @@ require('lazy').setup({
           pcall(vim.treesitter.start)
         end,
       })
+
     end,
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
