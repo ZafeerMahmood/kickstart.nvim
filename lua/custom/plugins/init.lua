@@ -146,6 +146,7 @@ return {
         snacks_win_opts = {
           env = { SHELL = 'pwsh' },
         },
+       focus_after_send = true,
       },
       diff_opts = {
         auto_close_on_accept = true,

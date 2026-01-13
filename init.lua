@@ -132,7 +132,10 @@ vim.o.smartcase = true
 vim.o.signcolumn = 'yes'
 
 -- Decrease update time
-vim.o.updatetime = 250
+vim.o.updatetime = 1000 -- CursorHold delay (1 second for auto-hover)
+
+-- Rounded borders on all floating windows (NvChad style)
+vim.o.winborder = 'rounded'
 
 -- Decrease mapped sequence wait time
 vim.o.timeoutlen = 300
@@ -642,6 +645,40 @@ require('lazy').setup({
             })
           end
 
+          -- Auto-show hover documentation on CursorHold (after 1 second)
+          -- Toggle with <leader>ta (toggle auto-hover)
+          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_hover, event.buf) then
+            vim.b[event.buf].auto_hover_enabled = true -- enabled by default
+
+            local hover_augroup = vim.api.nvim_create_augroup('kickstart-lsp-hover', { clear = false })
+            vim.api.nvim_create_autocmd('CursorHold', {
+              buffer = event.buf,
+              group = hover_augroup,
+              callback = function()
+                -- Only show if auto-hover is enabled and no floating window is open
+                if vim.b.auto_hover_enabled and not vim.b.hover_open then
+                  vim.b.hover_open = true
+                  vim.lsp.buf.hover()
+                end
+              end,
+            })
+
+            -- Clear hover state when cursor moves
+            vim.api.nvim_create_autocmd('CursorMoved', {
+              buffer = event.buf,
+              group = hover_augroup,
+              callback = function()
+                vim.b.hover_open = false
+              end,
+            })
+
+            -- Toggle auto-hover with <leader>ta
+            map('<leader>ta', function()
+              vim.b.auto_hover_enabled = not vim.b.auto_hover_enabled
+              print('Auto-hover: ' .. (vim.b.auto_hover_enabled and 'ON' or 'OFF'))
+            end, '[T]oggle [A]uto-hover')
+          end
+
           -- The following code creates a keymap to toggle inlay hints in your
           -- code, if the language server you are using supports them
           --
@@ -653,6 +690,27 @@ require('lazy').setup({
           end
         end,
       })
+
+      -- Configure LSP hover handler with syntax highlighting and themed borders
+      vim.lsp.handlers['textDocument/hover'] = function(err, result, ctx, config)
+        config = config or {}
+        config.border = 'rounded'
+        config.focus = false
+
+        -- Call the default handler to create the floating window
+        local bufnr, winnr = vim.lsp.handlers.hover(err, result, ctx, config)
+
+        -- If a window was created, enable treesitter syntax highlighting
+        if bufnr and winnr and vim.api.nvim_win_is_valid(winnr) then
+          -- Enable treesitter highlighting for markdown in the hover buffer
+          vim.treesitter.start(bufnr, 'markdown')
+
+          -- Apply colorscheme to floating window
+          vim.api.nvim_set_option_value('winhl', 'Normal:NormalFloat,FloatBorder:FloatBorder', { win = winnr })
+        end
+
+        return bufnr, winnr
+      end
 
       -- Diagnostic Config
       -- See :help vim.diagnostic.Opts
@@ -759,6 +817,30 @@ require('lazy').setup({
 
         -- Markdown
         marksman = {},
+
+        -- Spell checking (LSP-based, use gra for corrections)
+        ltex = {
+          filetypes = {
+            -- Documentation
+            'markdown', 'text', 'tex', 'plaintex', 'rst', 'org',
+            -- Git
+            'gitcommit', 'gitrebase',
+            -- Code (checks comments and strings)
+            'lua', 'python', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
+            'html', 'css', 'json', 'yaml', 'toml',
+            'c', 'cpp', 'go', 'rust', 'java', 'sh', 'bash', 'zsh',
+          },
+          settings = {
+            ltex = {
+              language = 'en-US',
+              -- Words to ignore (add your custom words here)
+              dictionary = {
+                ['en-US'] = {},
+              },
+              checkFrequency = 'edit', -- Real-time spell checking
+            },
+          },
+        },
 
         lua_ls = {
           -- cmd = { ... },
@@ -899,6 +981,10 @@ require('lazy').setup({
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
         preset = 'super-tab', -- Tab to accept, Shift-Tab to go back
+
+        -- Manual completion trigger: Ctrl+n opens menu OR selects next item
+        ['<C-n>'] = { 'show', 'select_next', 'fallback' },
+        ['<C-p>'] = { 'show', 'select_prev', 'fallback' },
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -1057,7 +1143,7 @@ require('lazy').setup({
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
-  -- place them in the correct locations.
+   -- place them in the correct locations.
 
   -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
   --
@@ -1106,4 +1192,4 @@ require('lazy').setup({
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 --
---
+ --
