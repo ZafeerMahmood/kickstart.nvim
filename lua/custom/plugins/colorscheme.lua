@@ -77,11 +77,13 @@ local function colorscheme_picker()
 end
 
 return {
-  -- ═══════════════════════════════════════════════════════════════════════════
-  -- POPULAR THEMES (All support neo-tree and treesitter)
-  -- ═══════════════════════════════════════════════════════════════════════════
+  {
+    'decaycs/decay.nvim',
+    name = 'decay',
+    lazy = false,
+    priority = 1000
+  },
 
-  -- #1 Catppuccin - Soothing pastel theme (7.1k stars)
   {
     'catppuccin/nvim',
     name = 'catppuccin',
@@ -101,7 +103,6 @@ return {
     },
   },
 
-  -- #2 Kanagawa - Japanese art inspired (5.8k stars)
   {
     'rebelot/kanagawa.nvim',
     lazy = false,
@@ -113,7 +114,6 @@ return {
     },
   },
 
-  -- #3 Rose Pine - Soho vibes (2.9k stars)
   {
     'rose-pine/neovim',
     name = 'rose-pine',
@@ -126,7 +126,6 @@ return {
     },
   },
 
-  -- #4 Nightfox - Highly customizable (3.9k stars)
   {
     'EdenEast/nightfox.nvim',
     lazy = false,
@@ -141,7 +140,6 @@ return {
     },
   },
 
-  -- #5 OneDark - Atom inspired
   {
     'navarasu/onedark.nvim',
     lazy = false,
@@ -154,7 +152,6 @@ return {
     },
   },
 
-  -- #6 Gruvbox Material - Refined gruvbox
   {
     'sainnhe/gruvbox-material',
     lazy = false,
@@ -166,7 +163,6 @@ return {
     end,
   },
 
-  -- #7 GitHub Theme - Official GitHub colors
   {
     'projekt0n/github-nvim-theme',
     lazy = false,
@@ -176,7 +172,6 @@ return {
     end,
   },
 
-  -- #8 Everforest - Green based comfortable theme
   {
     'sainnhe/everforest',
     lazy = false,
@@ -187,7 +182,6 @@ return {
     end,
   },
 
-  -- #9 VSCode Theme - Familiar colors
   {
     'Mofiqul/vscode.nvim',
     lazy = false,
@@ -198,7 +192,6 @@ return {
     },
   },
 
-  -- #10 Cyberdream - Modern cyberpunk
   {
     'scottmckendry/cyberdream.nvim',
     lazy = false,
@@ -208,7 +201,6 @@ return {
     },
   },
 
-  -- #11 Dracula - Classic dark theme
   {
     'Mofiqul/dracula.nvim',
     lazy = false,
@@ -218,7 +210,6 @@ return {
     },
   },
 
-  -- #12 Material - Google Material Design
   {
     'marko-cerovac/material.nvim',
     lazy = false,
@@ -231,7 +222,6 @@ return {
     },
   },
 
-  -- #13 Nord - Arctic inspired
   {
     'shaunsingh/nord.nvim',
     lazy = false,
@@ -241,14 +231,12 @@ return {
     end,
   },
 
-  -- #14 Oxocarbon - IBM Carbon inspired
   {
     'nyoom-engineering/oxocarbon.nvim',
     lazy = false,
     priority = 1000,
   },
 
-  -- #15 Solarized Osaka - Clean solarized variant
   {
     'craftzdog/solarized-osaka.nvim',
     lazy = false,
@@ -260,7 +248,6 @@ return {
     },
   },
 
-  -- #16 Sonokai - Vivid colors
   {
     'sainnhe/sonokai',
     lazy = false,
@@ -271,7 +258,6 @@ return {
     end,
   },
 
-  -- #17 Nordic - Warmer Nord variant
   {
     'AlexvZyl/nordic.nvim',
     lazy = false,
@@ -281,7 +267,6 @@ return {
     },
   },
 
-  -- #18 Gruvbox (Lua port)
   {
     'ellisonleao/gruvbox.nvim',
     lazy = false,
@@ -295,7 +280,6 @@ return {
     },
   },
 
-  -- #19 One Dark Pro - Enhanced One Dark
   {
     'olimorris/onedarkpro.nvim',
     lazy = false,
@@ -307,7 +291,6 @@ return {
     },
   },
 
-  -- #20 Monokai Pro - Professional Monokai
   {
     'loctvl842/monokai-pro.nvim',
     lazy = false,
@@ -318,7 +301,7 @@ return {
   },
 
   -- ═══════════════════════════════════════════════════════════════════════════
-  -- COLORSCHEME PERSISTENCE SYSTEM
+  -- COLORSCHEME SYSTEM
   -- ═══════════════════════════════════════════════════════════════════════════
   {
     'nvim-telescope/telescope.nvim',

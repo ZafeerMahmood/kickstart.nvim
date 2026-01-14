@@ -3,9 +3,7 @@
 --
 -- See the kickstart.nvim README for more information
 return {
-  -- Decay theme
-  { 'decaycs/decay.nvim', name = 'decay', lazy = false, priority = 1000 },
-
+ 
   -- Lazygit: Full git UI inside nvim
   {
     'kdheepak/lazygit.nvim',

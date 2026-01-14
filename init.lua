@@ -458,7 +458,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', function()
-        builtin.find_files { hidden = true, file_ignore_patterns = { '%.git[/\\]' } }
+        builtin.find_files {
+          hidden = true,
+          file_ignore_patterns = { '%.git[/\\]' },
+          find_command = { 'powershell', '-NoProfile', '-Command', '((rg --files) + (rg --files --no-ignore -g "*.md")) | Sort-Object -Unique' },
+        }
       end, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
@@ -1038,7 +1042,7 @@ require('lazy').setup({
     },
   },
 
-  -- NOTE: Colorschemes are now managed in lua/custom/plugins/colorscheme.lua
+  -- NOTE: Colorschemes are managed in lua/custom/plugins/colorscheme.lua
   -- Use <leader>cs to pick a colorscheme (it will be saved automatically)
   -- Or use :Telescope colorscheme for preview without saving
 
