@@ -15,14 +15,9 @@ return {
       { '<leader>gf', '<cmd>LazyGitCurrentFile<cr>', desc = 'LazyGit current file history' },
     },
     config = function()
-      vim.api.nvim_create_autocmd('TermOpen', {
-        pattern = '*lazygit*',
-        callback = function()
-          -- Map Esc to close lazygit (sends q to quit lazygit then closes buffer)
-          vim.keymap.set('t', '<Esc>', 'q', { buffer = true, desc = 'Close LazyGit' })
-          vim.keymap.set('t', '<Esc><Esc>', '<cmd>close<cr>', { buffer = true, desc = 'Force close LazyGit' })
-        end,
-      })
+      -- Let lazygit handle its own keybindings natively
+      -- q = quit lazygit, Esc = go back from current view
+      -- No overrides needed - lazygit's defaults work well
     end,
   },
 
@@ -142,12 +137,11 @@ return {
         snacks_win_opts = {
           env = { SHELL = 'pwsh' },
         },
-       focus_after_send = true,
       },
       diff_opts = {
         auto_close_on_accept = true,
-        vertical_split = true,
-        open_in_current_tab = false,
+        vertical_split = false,
+        open_in_current_tab = false,  -- Keep diff in current tab to avoid focus issues
       },
     },
   },

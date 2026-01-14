@@ -185,6 +185,11 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Custom :Exit command to close all panes, tabs, and buffers at once
+vim.api.nvim_create_user_command('Exit', function()
+  vim.cmd 'qa'
+end, { desc = 'Close all windows, tabs, and exit Neovim' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -461,7 +466,7 @@ require('lazy').setup({
         builtin.find_files {
           hidden = true,
           file_ignore_patterns = { '%.git[/\\]' },
-          find_command = { 'powershell', '-NoProfile', '-Command', '((rg --files) + (rg --files --no-ignore -g "*.md")) | Sort-Object -Unique' },
+          find_command = { 'powershell', '-NoProfile', '-Command', '((fd --type f --hidden --exclude .git --path-separator /) + (fd --type f --no-ignore --extension md --exclude .git --path-separator /)) | Sort-Object -Unique' },
         }
       end, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
