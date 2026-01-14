@@ -1,4 +1,4 @@
---[[
+ --[[
 
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
@@ -807,13 +807,18 @@ require('lazy').setup({
         },
 
         -- Python LSP (auto-detects venv, .venv, env, .env folders)
-        pyright = {
+        -- Using basedpyright with relaxed settings for Django/dynamic codebases
+        basedpyright = {
           settings = {
-            python = {
+            basedpyright = {
               analysis = {
                 autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
-                diagnosticMode = 'openFilesOnly', -- or 'workspace' for full project
+                diagnosticMode = 'openFilesOnly',
+                typeCheckingMode = 'basic', -- 'off', 'basic', 'standard', 'strict', 'all'
+                diagnosticSeverityOverrides = {
+                  reportUnreachable = 'none',
+                },
               },
             },
           },
