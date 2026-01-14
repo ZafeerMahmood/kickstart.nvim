@@ -806,19 +806,26 @@ require('lazy').setup({
           filetypes = { 'html', 'css', 'javascriptreact', 'typescriptreact' },
         },
 
-        -- Python LSP (auto-detects venv, .venv, env, .env folders)
-        -- Using basedpyright with relaxed settings for Django/dynamic codebases
-        basedpyright = {
+        -- Python LSP: pylsp with Jedi (great Django support, proper field completions)
+        -- Install: pip install python-lsp-server
+        pylsp = {
           settings = {
-            basedpyright = {
-              analysis = {
-                autoSearchPaths = true,
-                useLibraryCodeForTypes = true,
-                diagnosticMode = 'openFilesOnly',
-                typeCheckingMode = 'basic', -- 'off', 'basic', 'standard', 'strict', 'all'
-                diagnosticSeverityOverrides = {
-                  reportUnreachable = 'none',
-                },
+            pylsp = {
+              plugins = {
+                -- Completion
+                jedi_completion = { enabled = true, include_params = true },
+                jedi_hover = { enabled = true },
+                jedi_references = { enabled = true },
+                jedi_signature_help = { enabled = true },
+                jedi_symbols = { enabled = true },
+                -- Disable linters (use ruff or flake8 separately if needed)
+                pycodestyle = { enabled = false },
+                pylint = { enabled = false },
+                pyflakes = { enabled = false },
+                mccabe = { enabled = false },
+                -- Formatting (disable, use conform.nvim instead)
+                autopep8 = { enabled = false },
+                yapf = { enabled = false },
               },
             },
           },
