@@ -102,7 +102,7 @@ vim.g.have_nerd_font = true
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -808,7 +808,8 @@ require('lazy').setup({
         },
 
         -- Python LSP: pylsp with Jedi (great Django support, proper field completions)
-        -- Install: pip install python-lsp-server python-lsp-ruff pylsp-rope
+        -- Install: pip install python-lsp-server pylsp-rope
+        -- NOTE: Ruff linting is handled by standalone ruff LSP (faster, better code actions)
         pylsp = {
           settings = {
             pylsp = {
@@ -819,8 +820,8 @@ require('lazy').setup({
                   include_params = true,
                   include_class_objects = true,
                   include_function_objects = true,
-                  fuzzy = true, -- Enable fuzzy matching for better library discovery
-                  eager = true, -- Resolve completions eagerly for better accuracy
+                  fuzzy = true,
+                  eager = true,
                 },
                 jedi_hover = { enabled = true },
                 jedi_references = { enabled = true },
@@ -834,16 +835,12 @@ require('lazy').setup({
                 -- Rope for refactoring and auto-imports (pip install pylsp-rope)
                 rope_autoimport = {
                   enabled = true,
-                  memory = true, -- Cache imports in memory for speed
+                  memory = true,
                 },
                 rope_completion = { enabled = true, eager = true },
-                -- Ruff for fast linting (pip install python-lsp-ruff)
-                ruff = {
-                  enabled = true,
-                  formatEnabled = false, -- Use conform.nvim for formatting
-                  lineLength = 120,
-                },
-                -- Disable built-in linters (using ruff instead)
+                -- DISABLED: Ruff is handled by standalone ruff LSP (avoids encoding conflict)
+                ruff = { enabled = false },
+                -- Disable built-in linters (using ruff LSP instead)
                 pycodestyle = { enabled = false },
                 pylint = { enabled = false },
                 pyflakes = { enabled = false },
@@ -857,6 +854,17 @@ require('lazy').setup({
           },
         },
 
+        -- Ruff LSP - Fast Python linter with code actions (like VSCode)
+        -- Uses project's ruff.toml or pyproject.toml [tool.ruff] config
+        ruff = {
+          init_options = {
+            settings = {
+              lineLength = 120,
+              -- Ruff will auto-detect config from ruff.toml or pyproject.toml
+            },
+          },
+        },
+
         -- Config files
         jsonls = {},  -- JSON (package.json, tsconfig, etc.)
         yamlls = {},  -- YAML
@@ -865,26 +873,34 @@ require('lazy').setup({
         -- Markdown
         marksman = {},
 
+        -- ESLint LSP - provides diagnostics AND code actions (like VSCode)
+        -- Uses project's eslint.config.mjs or .eslintrc
+        eslint = {
+          filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+          settings = {
+            -- Use flat config (eslint.config.mjs)
+            experimental = {
+              useFlatConfig = true,
+            },
+            -- Working directory settings
+            workingDirectories = { mode = 'auto' },
+          },
+        },
+
         -- Spell checking (LSP-based, use gra for corrections)
+        -- NOTE: Only for docs/text files to avoid position encoding conflicts with code LSPs
         ltex = {
           filetypes = {
-            -- Documentation
             'markdown', 'text', 'tex', 'plaintex', 'rst', 'org',
-            -- Git
             'gitcommit', 'gitrebase',
-            -- Code (checks comments and strings)
-            'lua', 'python', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
-            'html', 'css', 'json', 'yaml', 'toml',
-            'c', 'cpp', 'go', 'rust', 'java', 'sh', 'bash', 'zsh',
           },
           settings = {
             ltex = {
               language = 'en-US',
-              -- Words to ignore (add your custom words here)
               dictionary = {
                 ['en-US'] = {},
               },
-              checkFrequency = 'edit', -- Real-time spell checking
+              checkFrequency = 'edit',
             },
           },
         },
@@ -923,6 +939,7 @@ require('lazy').setup({
         'stylua', -- Lua formatter
         'ruff', -- Python linter + formatter (fast)
         'prettierd', -- Frontend formatter (faster than prettier)
+        'eslint_d', -- Fast ESLint daemon for JS/TS linting
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -1000,12 +1017,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
         opts = {},
       },
@@ -1211,7 +1228,7 @@ require('lazy').setup({
   -- 
   -- require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
