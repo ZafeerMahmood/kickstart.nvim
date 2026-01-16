@@ -103,8 +103,7 @@ return {
     },
     config = function(_, opts)
       require('bufferline').setup(opts)
-      -- Keymaps for switching buffers (like Ctrl+Tab in VS Code)
-      vim.keymap.set('n', '<Tab>', '<cmd>BufferLineCycleNext<CR>', { desc = 'Next buffer' })
+      -- Keymaps for switching buffers
       vim.keymap.set('n', '<S-Tab>', '<cmd>BufferLineCyclePrev<CR>', { desc = 'Previous buffer' })
       vim.keymap.set('n', '<leader>x', function()
         local buf_to_close = vim.api.nvim_get_current_buf()

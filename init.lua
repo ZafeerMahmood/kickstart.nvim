@@ -197,21 +197,22 @@ end, { desc = 'Close all windows, tabs, and exit Neovim' })
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+vim.keymap.set('t', '<C-\\>', '<C-\\><C-n>', { desc = 'Exit terminal mode (Ctrl+\\)' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
 -- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
 -- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
+-- --
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('n', '<C-Left>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-Right>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<C-Down>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-Up>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -807,25 +808,50 @@ require('lazy').setup({
         },
 
         -- Python LSP: pylsp with Jedi (great Django support, proper field completions)
-        -- Install: pip install python-lsp-server
+        -- Install: pip install python-lsp-server python-lsp-ruff pylsp-rope
         pylsp = {
           settings = {
             pylsp = {
               plugins = {
-                -- Completion
-                jedi_completion = { enabled = true, include_params = true },
+                -- Jedi completion (core completions)
+                jedi_completion = {
+                  enabled = true,
+                  include_params = true,
+                  include_class_objects = true,
+                  include_function_objects = true,
+                  fuzzy = true, -- Enable fuzzy matching for better library discovery
+                  eager = true, -- Resolve completions eagerly for better accuracy
+                },
                 jedi_hover = { enabled = true },
                 jedi_references = { enabled = true },
                 jedi_signature_help = { enabled = true },
-                jedi_symbols = { enabled = true },
-                -- Disable linters (use ruff or flake8 separately if needed)
+                jedi_symbols = { enabled = true, all_scopes = true, include_import_symbols = true },
+                jedi_definition = {
+                  enabled = true,
+                  follow_imports = true,
+                  follow_builtin_imports = true,
+                },
+                -- Rope for refactoring and auto-imports (pip install pylsp-rope)
+                rope_autoimport = {
+                  enabled = true,
+                  memory = true, -- Cache imports in memory for speed
+                },
+                rope_completion = { enabled = true, eager = true },
+                -- Ruff for fast linting (pip install python-lsp-ruff)
+                ruff = {
+                  enabled = true,
+                  formatEnabled = false, -- Use conform.nvim for formatting
+                  lineLength = 120,
+                },
+                -- Disable built-in linters (using ruff instead)
                 pycodestyle = { enabled = false },
                 pylint = { enabled = false },
                 pyflakes = { enabled = false },
                 mccabe = { enabled = false },
-                -- Formatting (disable, use conform.nvim instead)
+                -- Disable built-in formatters (using conform.nvim)
                 autopep8 = { enabled = false },
                 yapf = { enabled = false },
+                black = { enabled = false },
               },
             },
           },
@@ -894,7 +920,9 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
+        'stylua', -- Lua formatter
+        'ruff', -- Python linter + formatter (fast)
+        'prettierd', -- Frontend formatter (faster than prettier)
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -934,11 +962,18 @@ require('lazy').setup({
       format_on_save = false, -- Disabled auto-format on save; use <leader>f to format manually
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        -- Python: ruff for fast formatting (install: pip install ruff)
+        python = { 'ruff_format', 'ruff_organize_imports' },
+        -- Frontend
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettierd', 'prettier', stop_after_first = true },
+        css = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
+        yaml = { 'prettierd', 'prettier', stop_after_first = true },
+        markdown = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -1001,11 +1036,12 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'super-tab', -- Tab to accept, Shift-Tab to go back
+        preset = 'enter', -- Enter to accept
 
         -- Manual completion trigger: Ctrl+n opens menu OR selects next item
-        ['<C-n>'] = { 'show', 'select_next', 'fallback' },
-        ['<C-p>'] = { 'show', 'select_prev', 'fallback' },
+        -- REMOVED 'fallback' to prevent Vim's native completion from adding extra items
+        ['<C-n>'] = { 'show', 'select_next' },
+        ['<C-p>'] = { 'show', 'select_prev' },
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -1030,15 +1066,35 @@ require('lazy').setup({
           treesitter_highlighting = true, -- Use treesitter for syntax highlighting in docs
         },
         menu = {
+          max_height = 15, -- Limit menu height for cleaner UI
           draw = {
             treesitter = { 'lsp' }, -- Use treesitter highlighting in completion menu
+            columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 }, { 'source_name' } },
           },
         },
+        -- Only show completions that are relevant
+        list = {
+          selection = { preselect = true, auto_insert = false },
+        },
+        -- Ghost text preview (like VS Code)
+        ghost_text = { enabled = true },
       },
 
       sources = {
+        -- LSP first (highest priority), then path, then snippets
+        -- No 'buffer' source = no random words from the file
         default = { 'lsp', 'path', 'snippets', 'lazydev' },
         providers = {
+          lsp = {
+            score_offset = 1000, -- Highest priority for LSP completions
+            fallbacks = {}, -- Don't fall back to other sources
+          },
+          path = {
+            score_offset = 500,
+          },
+          snippets = {
+            score_offset = 200,
+          },
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
       },
