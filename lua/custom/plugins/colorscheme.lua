@@ -81,7 +81,17 @@ return {
     'decaycs/decay.nvim',
     name = 'decay',
     lazy = false,
-    priority = 1000
+    priority = 1000,
+    opts = {
+      style = 'default', -- Options: 'default', 'dark', 'decayce', 'light'
+      italics = {
+        code = false,
+        comments = false,
+      },
+      nvim_tree = {
+        contrast = true,
+      },
+    },
   },
 
   {
