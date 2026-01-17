@@ -1053,7 +1053,7 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'enter', -- Enter to accept
+        preset = 'super-tab', -- Tab to accept (VSCode-like)
 
         -- Manual completion trigger: Ctrl+n opens menu OR selects next item
         -- REMOVED 'fallback' to prevent Vim's native completion from adding extra items
@@ -1090,8 +1090,14 @@ require('lazy').setup({
           },
         },
         -- Only show completions that are relevant
+        -- Smart preselect: disabled when inside a snippet to avoid Tab conflicts with super-tab preset
         list = {
-          selection = { preselect = true, auto_insert = false },
+          selection = {
+            preselect = function(ctx)
+              return not require('blink.cmp').snippet_active({ direction = 1 })
+            end,
+            auto_insert = false,
+          },
         },
         -- Ghost text preview (like VS Code)
         ghost_text = { enabled = true },
