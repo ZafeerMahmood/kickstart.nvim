@@ -95,6 +95,25 @@ return {
   },
 
   {
+    'ZafeerMahmood/unknown-decay.nvim',
+    name = 'unknown-decay',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require('unknown-decay').setup {
+        transparent = false,
+        italics = {
+          comments = false,
+          keywords = false,
+          parameters = false,
+          strings = false,
+          variables = false,
+        },
+      }
+    end,
+  },
+
+  {
     'catppuccin/nvim',
     name = 'catppuccin',
     lazy = false,
@@ -337,15 +356,15 @@ return {
         },
       }
 
-      -- Load saved colorscheme or default to tokyonight
+      -- Load saved colorscheme or default to unknown-decay
       local saved = load_saved_colorscheme()
       if saved and saved ~= '' then
         local ok, _ = pcall(vim.cmd.colorscheme, saved)
         if not ok then
-          vim.cmd.colorscheme 'tokyonight-night'
+          vim.cmd.colorscheme 'unknown-decay'
         end
       else
-        vim.cmd.colorscheme 'tokyonight-night'
+        vim.cmd.colorscheme 'unknown-decay'
       end
     end,
   },

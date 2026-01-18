@@ -113,6 +113,22 @@ return {
     end,
   },
 
+  -- hlargs.nvim: Highlight function arguments using Treesitter
+  {
+    'm-demare/hlargs.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    event = 'BufRead',
+    opts = {
+      hl_priority = 120,
+      excluded_argnames = {
+        usages = {
+          lua = { 'self' },
+          python = { 'self', 'cls' },
+        },
+      },
+    },
+  },
+
   -- Claude Code: AI-powered coding assistant inside Neovim
   {
     'coder/claudecode.nvim',
