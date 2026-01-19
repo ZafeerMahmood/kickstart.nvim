@@ -103,9 +103,9 @@ return {
       require('unknown-decay').setup {
         transparent = false,
         italics = {
-          comments = false,
+          comments = true,
           keywords = false,
-          parameters = false,
+          parameters = true,
           strings = false,
           variables = false,
         },
