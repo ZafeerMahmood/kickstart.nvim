@@ -310,10 +310,17 @@ require('lazy').setup({
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
+        add = { text = '│' },
+        change = { text = '│' },
+        delete = { text = '│' },
+        topdelete = { text = '│' },
+        changedelete = { text = '~' },
+      },
+      signs_staged = {
+        add = { text = '│' },
+        change = { text = '│' },
+        delete = { text = '│' },
+        topdelete = { text = '│' }, 
         changedelete = { text = '~' },
       },
     },
@@ -382,6 +389,7 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>m', group = '[M]ark (Harpoon)' },
       },
     },
   },
@@ -464,10 +472,21 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', function()
+        -- Common dependency directories to exclude
+        local excludes = '.git node_modules venv env .venv .env __pycache__ .cache dist build vendor bower_components .tox .mypy_cache .pytest_cache target .cargo'
+        local exclude_args = ''
+        for dir in excludes:gmatch '%S+' do
+          exclude_args = exclude_args .. ' --exclude ' .. dir
+        end
+        local cmd = string.format(
+          '((fd --type f --hidden%s --path-separator /) + (fd --type f --no-ignore --extension md%s --path-separator /)) | Sort-Object -Unique',
+          exclude_args,
+          exclude_args
+        )
         builtin.find_files {
           hidden = true,
           file_ignore_patterns = { '%.git[/\\]' },
-          find_command = { 'powershell', '-NoProfile', '-Command', '((fd --type f --hidden --exclude .git --path-separator /) + (fd --type f --no-ignore --extension md --exclude .git --path-separator /)) | Sort-Object -Unique' },
+          find_command = { 'powershell', '-NoProfile', '-Command', cmd },
         }
       end, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
@@ -948,10 +967,11 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua', -- Lua formatter
-        'ruff', -- Python linter + formatter (fast)
-        'prettierd', -- Frontend formatter (faster than prettier)
-        'eslint_d', -- Fast ESLint daemon for JS/TS linting
+        'stylua', -- Lua formatter (used by conform)
+        -- Uncomment formatters below if you want to use them instead of LSP:
+        -- 'ruff', -- Python linter + formatter (fast)
+        -- 'prettierd', -- Frontend formatter (faster than prettier)
+        -- 'eslint_d', -- Fast ESLint daemon for JS/TS linting
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -991,18 +1011,7 @@ require('lazy').setup({
       format_on_save = false, -- Disabled auto-format on save; use <leader>f to format manually
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Python: ruff for fast formatting (install: pip install ruff)
-        python = { 'ruff_format', 'ruff_organize_imports' },
-        -- Frontend
-        javascript = { 'prettierd', 'prettier', stop_after_first = true },
-        typescript = { 'prettierd', 'prettier', stop_after_first = true },
-        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-        html = { 'prettierd', 'prettier', stop_after_first = true },
-        css = { 'prettierd', 'prettier', stop_after_first = true },
-        json = { 'prettierd', 'prettier', stop_after_first = true },
-        yaml = { 'prettierd', 'prettier', stop_after_first = true },
-        markdown = { 'prettierd', 'prettier', stop_after_first = true },
+        python = { 'ruff_format' },
       },
     },
   },
@@ -1175,20 +1184,12 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
+      -- NOTE: mini.statusline disabled - using lualine instead (see lua/custom/plugins/ui.lua)
+      -- local statusline = require 'mini.statusline'
+      -- statusline.setup { use_icons = vim.g.have_nerd_font }
+      -- statusline.section_location = function()
+      --   return '%2l:%-2v'
+      -- end
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
@@ -1286,4 +1287,4 @@ require('lazy').setup({
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 --
- --
+  --

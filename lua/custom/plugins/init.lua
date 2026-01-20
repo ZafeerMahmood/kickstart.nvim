@@ -3,7 +3,6 @@
 --
 -- See the kickstart.nvim README for more information
 return {
- 
   -- Lazygit: Full git UI inside nvim
   {
     'kdheepak/lazygit.nvim',
@@ -133,7 +132,6 @@ return {
   {
     'coder/claudecode.nvim',
     dependencies = { 'folke/snacks.nvim' },
-    config = true,
     keys = {
       { '<leader>ac', '<cmd>ClaudeCode<cr>', mode = { 'n' }, desc = '[A]I [C]laude toggle' },
       { '<leader>af', '<cmd>ClaudeCodeFocus<cr>', mode = { 'n' }, desc = '[A]I [F]ocus Claude' },
@@ -156,9 +154,26 @@ return {
       diff_opts = {
         auto_close_on_accept = true,
         vertical_split = false,
-        open_in_current_tab = false,  -- Keep diff in current tab to avoid focus issues
+        open_in_current_tab = false,
       },
     },
+    config = function(_, opts)
+      require('claudecode').setup(opts)
+      -- Force normal mode when entering claudecode diff buffers
+      vim.api.nvim_create_autocmd('BufEnter', {
+        pattern = '*',
+        callback = function()
+          local bufname = vim.api.nvim_buf_get_name(0)
+          local buftype = vim.bo.buftype
+          -- Detect claudecode diff buffers (contain "proposed" or are acwrite type)
+          if bufname:match('proposed') or bufname:match('NEW FILE') or buftype == 'acwrite' then
+            vim.schedule(function()
+              vim.cmd('stopinsert')
+            end)
+          end
+        end,
+      })
+    end,
   },
 }
 
