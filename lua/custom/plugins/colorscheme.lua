@@ -78,23 +78,6 @@ end
 
 return {
   {
-    'decaycs/decay.nvim',
-    name = 'decay',
-    lazy = false,
-    priority = 1000,
-    opts = {
-      style = 'default', -- Options: 'default', 'dark', 'decayce', 'light'
-      italics = {
-        code = false,
-        comments = false,
-      },
-      nvim_tree = {
-        contrast = true,
-      },
-    },
-  },
-
-  {
     'ZafeerMahmood/unknown-decay.nvim',
     name = 'unknown-decay',
     lazy = false,
@@ -128,6 +111,19 @@ return {
         gitsigns = true,
         mini = true,
         native_lsp = { enabled = true },
+      },
+    },
+  },
+
+  {
+    'rose-pine/neovim',
+    name = 'rose-pine',
+    lazy = false,
+    priority = 1000,
+    opts = {
+      variant = 'auto', -- auto, main, moon, dawn
+      styles = {
+        italic = false,
       },
     },
   },

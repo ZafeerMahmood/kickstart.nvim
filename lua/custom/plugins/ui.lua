@@ -60,7 +60,7 @@ return {
       -- dashboard.section.footer.opts.hl = "AlphaFooter"
 
       dashboard.section.buttons.val = {
-          dashboard.button('f', 'Find File        f → <leader>sf', ':Telescope find_files<cr>'),
+          dashboard.button('f', 'Find File        f → Ctrl+P', ':Telescope find_files<cr>'),
           dashboard.button('r', 'Recent Files     r → <leader>s.', ':Telescope oldfiles<cr>'),
           dashboard.button('g', 'Find Text        g → <leader>sg', ':Telescope live_grep<cr>'),
           dashboard.button('c', 'Configuration    c → $MYVIMRC', ':e $MYVIMRC<cr>'),

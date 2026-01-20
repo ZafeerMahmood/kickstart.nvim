@@ -162,7 +162,7 @@ vim.o.inccommand = 'split'
 vim.o.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.o.scrolloff = 10
+vim.o.scrolloff = 8
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
@@ -178,9 +178,22 @@ vim.o.expandtab = true
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Windows-style keymaps (in addition to Vim defaults: y=yank, p=paste, u=undo, C-r=redo)
+-- Copy: Ctrl+C in visual mode yanks to clipboard
+vim.keymap.set('v', '<C-c>', '"+y', { desc = 'Copy to clipboard' })
+-- Paste: Ctrl+V pastes from clipboard
+vim.keymap.set('n', '<C-v>', '"+p', { desc = 'Paste from clipboard' })
+vim.keymap.set('v', '<C-v>', '"+p', { desc = 'Paste from clipboard' })
+vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste from clipboard' })
+-- Redo: Ctrl+Z (in addition to Ctrl+R)
+vim.keymap.set('n', '<C-z>', '<C-r>', { desc = 'Redo' })
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+-- Move lines up/down: configured via mini.move (see mini.nvim config below)
+-- Use Shift+Arrow keys to move lines/selections (hold Shift, press arrows repeatedly)
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
@@ -219,6 +232,22 @@ vim.keymap.set('n', '<C-Up>', '<C-w><C-k>', { desc = 'Move focus to the upper wi
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+
+-- Search and replace in buffer
+-- If cursor is on a word, prefill :%s/word/, otherwise just :%s/
+vim.keymap.set('n', '<leader>r', function()
+  local word = vim.fn.expand '<cword>'
+  if word ~= '' then
+    -- Escape special regex characters in the word
+    word = vim.fn.escape(word, [[/\.*$^~[]])
+    vim.fn.feedkeys(':%s/' .. word .. '/', 'n')
+  else
+    vim.fn.feedkeys(':%s/', 'n')
+  end
+end, { desc = '[R]eplace word in buffer' })
+
+-- Visual mode: replace selected text
+vim.keymap.set('v', '<leader>r', 'y:%s/<C-r>"/', { desc = '[R]eplace selection in buffer' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -471,7 +500,7 @@ require('lazy').setup({
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', function()
+      vim.keymap.set('n', '<C-p>', function()
         -- Common dependency directories to exclude
         local excludes = '.git node_modules venv env .venv .env __pycache__ .cache dist build vendor bower_components .tox .mypy_cache .pytest_cache target .cargo'
         local exclude_args = ''
@@ -488,25 +517,27 @@ require('lazy').setup({
           file_ignore_patterns = { '%.git[/\\]' },
           find_command = { 'powershell', '-NoProfile', '-Command', cmd },
         }
-      end, { desc = '[S]earch [F]iles' })
+      end, { desc = 'Find Files (Ctrl+P)' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', function()
         builtin.grep_string {
           additional_args = { '--path-separator', '/' },
         }
       end, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>sg', function()
+
+      vim.keymap.set('n', '<C-g>', function()
         builtin.live_grep {
           additional_args = { '--path-separator', '/' },
         }
       end, { desc = '[S]earch by [G]rep' })
+
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
-      vim.keymap.set('n', '<leader>/', function()
+      vim.keymap.set('n', '<C-f>', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
         builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
           winblend = 10,
@@ -688,37 +719,38 @@ require('lazy').setup({
 
           -- Auto-show hover documentation on CursorHold (after 1 second)
           -- Toggle with <leader>ta (toggle auto-hover)
-          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_hover, event.buf) then
-            vim.b[event.buf].auto_hover_enabled = true -- enabled by default
-
-            local hover_augroup = vim.api.nvim_create_augroup('kickstart-lsp-hover', { clear = false })
-            vim.api.nvim_create_autocmd('CursorHold', {
-              buffer = event.buf,
-              group = hover_augroup,
-              callback = function()
-                -- Only show if auto-hover is enabled and no floating window is open
-                if vim.b.auto_hover_enabled and not vim.b.hover_open then
-                  vim.b.hover_open = true
-                  vim.lsp.buf.hover()
-                end
-              end,
-            })
-
-            -- Clear hover state when cursor moves
-            vim.api.nvim_create_autocmd('CursorMoved', {
-              buffer = event.buf,
-              group = hover_augroup,
-              callback = function()
-                vim.b.hover_open = false
-              end,
-            })
-
-            -- Toggle auto-hover with <leader>ta
-            map('<leader>ta', function()
-              vim.b.auto_hover_enabled = not vim.b.auto_hover_enabled
-              print('Auto-hover: ' .. (vim.b.auto_hover_enabled and 'ON' or 'OFF'))
-            end, '[T]oggle [A]uto-hover')
-          end
+          -- DISABLED: Auto-hover commented out for now
+          -- if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_hover, event.buf) then
+          --   vim.b[event.buf].auto_hover_enabled = true -- enabled by default
+          --
+          --   local hover_augroup = vim.api.nvim_create_augroup('kickstart-lsp-hover', { clear = false })
+          --   vim.api.nvim_create_autocmd('CursorHold', {
+          --     buffer = event.buf,
+          --     group = hover_augroup,
+          --     callback = function()
+          --       -- Only show if auto-hover is enabled and no floating window is open
+          --       if vim.b.auto_hover_enabled and not vim.b.hover_open then
+          --         vim.b.hover_open = true
+          --         vim.lsp.buf.hover()
+          --       end
+          --     end,
+          --   })
+          --
+          --   -- Clear hover state when cursor moves
+          --   vim.api.nvim_create_autocmd('CursorMoved', {
+          --     buffer = event.buf,
+          --     group = hover_augroup,
+          --     callback = function()
+          --       vim.b.hover_open = false
+          --     end,
+          --   })
+          --
+          --   -- Toggle auto-hover with <leader>ta
+          --   map('<leader>ta', function()
+          --     vim.b.auto_hover_enabled = not vim.b.auto_hover_enabled
+          --     print('Auto-hover: ' .. (vim.b.auto_hover_enabled and 'ON' or 'OFF'))
+          --   end, '[T]oggle [A]uto-hover')
+          -- end
 
           -- The following code creates a keymap to toggle inlay hints in your
           -- code, if the language server you are using supports them
@@ -1076,8 +1108,8 @@ require('lazy').setup({
         -- See :h blink-cmp-config-keymap for defining your own keymap
         preset = 'super-tab', -- Tab to accept (VSCode-like)
 
-        -- Manual completion trigger: Ctrl+n opens menu OR selects next item
-        -- REMOVED 'fallback' to prevent Vim's native completion from adding extra items
+        -- Manual completion trigger: Ctrl+Space opens menu (no auto-popup)
+        ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
         ['<C-n>'] = { 'show', 'select_next' },
         ['<C-p>'] = { 'show', 'select_prev' },
 
@@ -1183,6 +1215,25 @@ require('lazy').setup({
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
+
+      -- Move lines/selections with Shift+Arrow keys (hold Shift, press arrows repeatedly)
+      require('mini.move').setup {
+        mappings = {
+          -- Move visual selection
+          left = '<S-Left>',
+          right = '<S-Right>',
+          down = '<S-Down>',
+          up = '<S-Up>',
+          -- Move current line in Normal mode
+          line_left = '<S-Left>',
+          line_right = '<S-Right>',
+          line_down = '<S-Down>',
+          line_up = '<S-Up>',
+        },
+        options = {
+          reindent_linewise = true, -- Auto-indent when moving lines vertically
+        },
+      }
 
       -- NOTE: mini.statusline disabled - using lualine instead (see lua/custom/plugins/ui.lua)
       -- local statusline = require 'mini.statusline'
