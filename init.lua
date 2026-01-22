@@ -187,6 +187,8 @@ vim.keymap.set('v', '<C-v>', '"+p', { desc = 'Paste from clipboard' })
 vim.keymap.set('i', '<C-v>', '<C-r>+', { desc = 'Paste from clipboard' })
 -- Redo: Ctrl+Z (in addition to Ctrl+R)
 vim.keymap.set('n', '<C-z>', '<C-r>', { desc = 'Redo' })
+-- Select all: Ctrl+A
+vim.keymap.set('n', '<C-a>', 'ggVG', { desc = 'Select all' })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -866,9 +868,9 @@ require('lazy').setup({
         html = { filetypes = { 'html', 'templ' } },
         cssls = {},
         tailwindcss = {},
-        emmet_ls = { -- Quick HTML/CSS snippets
-          filetypes = { 'html', 'css', 'javascriptreact', 'typescriptreact' },
-        },
+        -- emmet_ls = { -- Quick HTML/CSS snippets (disabled - saves one LSP process)
+        --   filetypes = { 'html', 'css', 'javascriptreact', 'typescriptreact' },
+        -- },
 
         -- Python LSP: pylsp with Jedi (great Django support, proper field completions)
         -- Install: pip install python-lsp-server pylsp-rope
@@ -951,22 +953,23 @@ require('lazy').setup({
         },
 
         -- Spell checking (LSP-based, use gra for corrections)
-        -- NOTE: Only for docs/text files to avoid position encoding conflicts with code LSPs
-        ltex = {
-          filetypes = {
-            'markdown', 'text', 'tex', 'plaintex', 'rst', 'org',
-            'gitcommit', 'gitrebase',
-          },
-          settings = {
-            ltex = {
-              language = 'en-US',
-              dictionary = {
-                ['en-US'] = {},
-              },
-              checkFrequency = 'edit',
-            },
-          },
-        },
+        -- NOTE: Disabled - ltex-ls is a heavy Java LSP (90+ JARs) that slows startup
+        -- Uncomment if you need spell checking in markdown/text files
+        -- ltex = {
+        --   filetypes = {
+        --     'markdown', 'text', 'tex', 'plaintex', 'rst', 'org',
+        --     'gitcommit', 'gitrebase',
+        --   },
+        --   settings = {
+        --     ltex = {
+        --       language = 'en-US',
+        --       dictionary = {
+        --         ['en-US'] = {},
+        --       },
+        --       checkFrequency = 'edit',
+        --     },
+        --   },
+        -- },
 
         lua_ls = {
           -- cmd = { ... },

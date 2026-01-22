@@ -66,10 +66,6 @@ return {
   {
     'numToStr/Comment.nvim',
     opts = {},
-    keys = {
-      { 'gcc', mode = 'n', desc = 'Toggle comment line' },
-      { 'gc', mode = { 'n', 'v' }, desc = 'Toggle comment' },
-    },
   },
 
   -- Bufferline: VS Code-like tabs at the top
@@ -163,10 +159,11 @@ return {
       vim.api.nvim_create_autocmd('BufEnter', {
         pattern = '*',
         callback = function()
-          local bufname = vim.api.nvim_buf_get_name(0)
+          -- Quick exit for normal buffers (most common case)
           local buftype = vim.bo.buftype
-          -- Detect claudecode diff buffers (contain "proposed" or are acwrite type)
-          if bufname:match('proposed') or bufname:match('NEW FILE') or buftype == 'acwrite' then
+          if buftype == '' then return end
+          -- Only check acwrite buffers (claudecode diffs)
+          if buftype == 'acwrite' then
             vim.schedule(function()
               vim.cmd('stopinsert')
             end)

@@ -60,12 +60,12 @@ return {
       -- dashboard.section.footer.opts.hl = "AlphaFooter"
 
       dashboard.section.buttons.val = {
-          dashboard.button('f', 'Find File        f → Ctrl+P', ':Telescope find_files<cr>'),
-          dashboard.button('r', 'Recent Files     r → <leader>s.', ':Telescope oldfiles<cr>'),
-          dashboard.button('g', 'Find Text        g → <leader>sg', ':Telescope live_grep<cr>'),
-          dashboard.button('c', 'Configuration    c → $MYVIMRC', ':e $MYVIMRC<cr>'),
-          dashboard.button('l', 'Lazy             l → :Lazy', ':Lazy<cr>'),
-          dashboard.button('q', 'Quit             q → :qa', ':qa<cr>'),
+          dashboard.button('f', 'Find File        Ctrl+p', ':Telescope find_files<cr>'),
+          dashboard.button('r', 'Recent Files     <leader>s.', ':Telescope oldfiles<cr>'),
+          dashboard.button('g', 'Find Text        Ctrl+g', ':Telescope live_grep<cr>'),
+          dashboard.button('c', 'Configuration    $MYVIMRC', ':e $MYVIMRC<cr>'),
+          dashboard.button('l', 'Lazy             :Lazy', ':Lazy<cr>'),
+          dashboard.button('q', 'Quit             :Exit', ':qa<cr>'),
       }
 
 

@@ -99,7 +99,7 @@ return {
   {
     'catppuccin/nvim',
     name = 'catppuccin',
-    lazy = false,
+    lazy = true, -- Load on-demand when selected via <leader>cs
     priority = 1000,
     opts = {
       flavour = 'mocha', -- latte, frappe, macchiato, mocha
@@ -118,7 +118,7 @@ return {
   {
     'rose-pine/neovim',
     name = 'rose-pine',
-    lazy = false,
+    lazy = true, -- Load on-demand when selected via <leader>cs
     priority = 1000,
     opts = {
       variant = 'auto', -- auto, main, moon, dawn
