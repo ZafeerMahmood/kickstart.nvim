@@ -1,4 +1,4 @@
--- Folding: VSCode-like code folding with persistence
+-- Folding
 -- Uses treesitter for smart folding, saves fold state between sessions
 -- Standard vim fold commands: za (toggle), zc (close), zo (open), zM (close all), zR (open all)
 

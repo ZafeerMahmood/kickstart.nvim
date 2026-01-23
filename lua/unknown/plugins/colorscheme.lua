@@ -99,10 +99,10 @@ return {
   {
     'catppuccin/nvim',
     name = 'catppuccin',
-    lazy = true, -- Load on-demand when selected via <leader>cs
+    lazy = true,
     priority = 1000,
     opts = {
-      flavour = 'mocha', -- latte, frappe, macchiato, mocha
+      flavour = 'mocha',
       integrations = {
         neo_tree = true,
         telescope = true,
@@ -118,10 +118,10 @@ return {
   {
     'rose-pine/neovim',
     name = 'rose-pine',
-    lazy = true, -- Load on-demand when selected via <leader>cs
+    lazy = true,
     priority = 1000,
     opts = {
-      variant = 'auto', -- auto, main, moon, dawn
+      variant = 'auto',
       styles = {
         italic = false,
       },
