@@ -7,7 +7,7 @@ return {
   opts = {
     size = 15,
     open_mapping = [[<C-\>]],
-    direction = 'horizontal',
+    direction = 'float', -- 'horizontal' for VScode like terminal
     shell = 'pwsh -NoLogo',
     shade_terminals = true,
     shading_factor = 2,
@@ -16,6 +16,6 @@ return {
   },
   keys = {
     { '<C-\\>', desc = 'Toggle terminal' },
-    { '<leader>tt', '<cmd>ToggleTerm direction=float<cr>', desc = '[T]erminal floa[t]' },
+    -- { '<leader>tt', '<cmd>ToggleTerm direction=float<cr>', desc = '[T]erminal floa[t]' },
   },
 }

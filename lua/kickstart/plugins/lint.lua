@@ -6,16 +6,28 @@ return {
     config = function()
       local lint = require 'lint'
 
-      -- Configure linters by filetype
-      -- NOTE: ESLint is handled by eslint LSP (provides diagnostics + code actions like VSCode)
-      -- NOTE: Python ruff is handled by ruff LSP (provides diagnostics + code actions)
-      -- nvim-lint is only used for linters without LSP support
+      local eslint = { fix = 'source.fixAll.eslint', organize = 'source.organizeImports', name = 'ESLint' }
+      local ruff = { fix = 'source.fixAll.ruff', organize = 'source.organizeImports.ruff', name = 'Ruff' }
+      local default_linter = { fix = 'source.fixAll', organize = 'source.organizeImports', name = 'LSP' }
+
+      local lsp_linters = {
+        javascript = eslint,
+        javascriptreact = eslint,
+        typescript = eslint,
+        typescriptreact = eslint,
+        python = ruff,
+        vue  = eslint,
+        -- go = { fix = 'source.fixAll', organize = 'source.organizeImports', name = 'gopls' },
+      }
+
+      -----------------------------------------------------------
+      -- nvim-lint configuration (for non-LSP linters)
+      -----------------------------------------------------------
       lint.linters_by_ft = {
-        -- Add non-LSP linters here if needed
         -- markdown = { 'markdownlint' },
       }
 
-      -- Create autocommand which carries out the actual linting
+      -- Autocommand for nvim-lint
       local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
       vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
         group = lint_augroup,
@@ -26,51 +38,33 @@ return {
         end,
       })
 
-      -- :FixLint command - Fix auto-fixable lint issues explicitly
-      -- Uses ESLint LSP for JS/TS (source.fixAll.eslint)
-      -- Uses Ruff LSP for Python (source.fixAll.ruff)
+      -----------------------------------------------------------
+      -- Commands
+      -----------------------------------------------------------
+      local function get_linter_config()
+        return lsp_linters[vim.bo.filetype] or default_linter
+      end
+
+      local function run_code_action(action_key, message)
+        local config = get_linter_config()
+        vim.lsp.buf.code_action {
+          context = { only = { config[action_key] } },
+          apply = true,
+        }
+        vim.notify(config.name .. ': ' .. message, vim.log.levels.INFO)
+      end
+
       vim.api.nvim_create_user_command('FixLint', function()
-        local ft = vim.bo.filetype
+        run_code_action('fix', 'Fixing all auto-fixable issues...')
+      end, { desc = 'Fix auto-fixable lint issues' })
 
-        -- JavaScript/TypeScript - Use ESLint LSP code action
-        if ft == 'javascript' or ft == 'javascriptreact' or ft == 'typescript' or ft == 'typescriptreact' then
-          vim.lsp.buf.code_action {
-            context = { only = { 'source.fixAll.eslint' } },
-            apply = true,
-          }
-          vim.notify('ESLint: Fixing all auto-fixable issues...', vim.log.levels.INFO)
-
-        -- Python - Use Ruff LSP code action
-        elseif ft == 'python' then
-          vim.lsp.buf.code_action {
-            context = { only = { 'source.fixAll.ruff' } },
-            apply = true,
-          }
-          vim.notify('Ruff: Fixing all auto-fixable issues...', vim.log.levels.INFO)
-        else
-          vim.notify('No lint fixer for filetype: ' .. ft, vim.log.levels.WARN)
-        end
-      end, { desc = 'Fix auto-fixable lint issues (ESLint/Ruff)' })
-
-      -- :OrganizeImports command for JS/TS and Python
       vim.api.nvim_create_user_command('OrganizeImports', function()
-        local ft = vim.bo.filetype
-        if ft == 'javascript' or ft == 'javascriptreact' or ft == 'typescript' or ft == 'typescriptreact' then
-          -- TypeScript/ESLint organize imports
-          vim.lsp.buf.code_action {
-            context = { only = { 'source.organizeImports' } },
-            apply = true,
-          }
-        elseif ft == 'python' then
-          -- Ruff organize imports
-          vim.lsp.buf.code_action {
-            context = { only = { 'source.organizeImports.ruff' } },
-            apply = true,
-          }
-        end
+        run_code_action('organize', 'Organizing imports...')
       end, { desc = 'Organize imports' })
 
+      -----------------------------------------------------------
       -- Keymaps
+      -----------------------------------------------------------
       vim.keymap.set('n', '<leader>lf', '<cmd>FixLint<CR>', { desc = '[L]int [F]ix all auto-fixable' })
       vim.keymap.set('n', '<leader>lo', '<cmd>OrganizeImports<CR>', { desc = '[L]int [O]rganize imports' })
     end,
