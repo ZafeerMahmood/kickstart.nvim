@@ -1,9 +1,8 @@
--- Colorscheme persistence and popular themes
+-- Colorscheme
 -- Saves your colorscheme choice and restores it on startup
 
 local colorscheme_file = vim.fn.stdpath 'data' .. '/colorscheme.txt'
 
--- Helper function to save colorscheme
 local function save_colorscheme(name)
   local file = io.open(colorscheme_file, 'w')
   if file then
@@ -12,7 +11,6 @@ local function save_colorscheme(name)
   end
 end
 
--- Helper function to load saved colorscheme
 local function load_saved_colorscheme()
   local file = io.open(colorscheme_file, 'r')
   if file then
@@ -23,7 +21,6 @@ local function load_saved_colorscheme()
   return nil
 end
 
--- Custom Telescope colorscheme picker that saves selection
 local function colorscheme_picker()
   local actions = require 'telescope.actions'
   local action_state = require 'telescope.actions.state'
@@ -47,7 +44,6 @@ local function colorscheme_picker()
       sorter = conf.generic_sorter {},
       previewer = previewers.new_buffer_previewer {
         define_preview = function(self, entry)
-          -- Preview the colorscheme when hovering
           vim.cmd.colorscheme(entry.value)
         end,
       },
@@ -64,9 +60,7 @@ local function colorscheme_picker()
         -- Restore original on cancel
         actions.close:enhance {
           post = function()
-            -- Only restore if no selection was made (cancelled)
             if vim.g.colors_name ~= original then
-              -- Check if we should restore (no save happened)
             end
           end,
         }

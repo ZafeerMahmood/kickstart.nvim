@@ -13,6 +13,5 @@ return {
   config = function()
     -- Let lazygit handle its own keybindings natively
     -- q = quit lazygit, Esc = go back from current view
-    -- No overrides needed - lazygit's defaults work well
   end,
 }
