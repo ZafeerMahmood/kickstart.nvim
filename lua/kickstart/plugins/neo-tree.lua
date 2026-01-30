@@ -31,7 +31,7 @@ return {
         },
       },
       follow_current_file = { enabled = true },
-      use_libuv_file_watcher = true,
+      use_libuv_file_watcher = false, -- NOTE: change this to true if you need latest changes in neo-tree
     },
   },
   config = function(_, opts)

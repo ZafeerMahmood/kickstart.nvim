@@ -29,7 +29,8 @@ return {
 
       -- Autocommand for nvim-lint
       local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
-      vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
+      -- NOTE: add 'BufEnter' when needed
+      vim.api.nvim_create_autocmd({'BufWritePost', 'InsertLeave' }, {
         group = lint_augroup,
         callback = function()
           if vim.bo.modifiable then
