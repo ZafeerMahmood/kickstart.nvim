@@ -20,7 +20,7 @@ return {
       split_side = 'right',
       split_width_percentage = 0.40,
       snacks_win_opts = {
-        env = { SHELL = 'pwsh' },
+        env = { SHELL = 'cmd' }, --WARN: try with "pwsh" or "pwsh -NoProfile"
       },
     },
     diff_opts = {
@@ -42,6 +42,14 @@ return {
             vim.cmd('stopinsert')
           end)
         end
+      end,
+    })
+
+    -- Auto-reload buffers when files change on disk (after diff accept/deny)
+    vim.o.autoread = true
+    vim.api.nvim_create_autocmd({ 'FocusGained' }, {
+      callback = function()
+        vim.cmd('checktime')
       end,
     })
   end,
