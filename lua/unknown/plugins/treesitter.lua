@@ -26,6 +26,8 @@ return {
     -- Enable treesitter highlighting for all filetypes with a parser
     vim.api.nvim_create_autocmd('FileType', {
       callback = function()
+        local bufftype = vim.bo.buftype
+        if bufftype ~= '' then return end
         pcall(vim.treesitter.start)
       end,
     })
