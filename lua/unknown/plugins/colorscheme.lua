@@ -93,7 +93,7 @@ return {
   {
     'catppuccin/nvim',
     name = 'catppuccin',
-    lazy = true,
+    lazy = false,
     priority = 1000,
     opts = {
       flavour = 'mocha',
@@ -112,7 +112,7 @@ return {
   {
     'rose-pine/neovim',
     name = 'rose-pine',
-    lazy = true,
+    lazy = false,
     priority = 1000,
     opts = {
       variant = 'auto',
