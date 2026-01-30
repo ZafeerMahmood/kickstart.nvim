@@ -81,7 +81,7 @@ return {
       -- Optionally, set `auto_show = true` to show the documentation after a delay.
       documentation = {
         auto_show = true,
-        auto_show_delay_ms = 50,
+        auto_show_delay_ms = 100,
         window = {
           max_width = 80,         -- Wider documentation window
           max_height = 20,       -- Taller documentation window
@@ -137,7 +137,7 @@ return {
     -- the rust implementation via `'prefer_rust_with_warning'`
     --
     -- See :h blink-cmp-config-fuzzy for more information
-    fuzzy = { implementation = 'lua' },
+    fuzzy = { implementation = 'prefer_rust_with_warning' },
 
     -- Shows a signature help window while you type arguments for a function
     signature = { enabled = true },
