@@ -192,6 +192,10 @@ vim.keymap.set('n', '<C-a>', 'ggVG', { desc = 'Select all' })
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Center buffer after half-page scroll
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center' })
+
 -- Move lines up/down: configured via mini.move (see mini.nvim config below)
 -- Use Shift+Arrow keys to move lines/selections (hold Shift, press arrows repeatedly)
 
