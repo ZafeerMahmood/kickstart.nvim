@@ -46,16 +46,28 @@ return {
 
     -- [[ Configure Telescope ]]
     -- See `:help telescope` and `:help telescope.setup()`
+    local actions = require 'telescope.actions'
+
+    -- Center buffer after Telescope selection
+    local center_after_select = function(prompt_bufnr)
+      actions.select_default(prompt_bufnr)
+      vim.schedule(function()
+        vim.cmd 'normal! zz'
+      end)
+    end
+
     require('telescope').setup {
-      -- You can put your default mappings / updates / etc. in here
-      --  All the info you're looking for is in `:help telescope.setup()`
-      --
-      -- defaults = {
-      --   mappings = {
-      --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-      --   },
-      -- },
-      -- pickers = {}
+      defaults = {
+        mappings = {
+          i = {
+            ['<CR>'] = center_after_select,
+            ['<c-enter>'] = 'to_fuzzy_refine',
+          },
+          n = {
+            ['<CR>'] = center_after_select,
+          },
+        },
+      },
       extensions = {
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),
