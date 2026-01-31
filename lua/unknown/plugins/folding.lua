@@ -10,7 +10,7 @@
     },
     event = 'BufReadPost',
     init = function()
-      vim.o.foldcolumn = '1'
+      -- foldcolumn set in init.lua
       vim.o.foldlevel = 99
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true

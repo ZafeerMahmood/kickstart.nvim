@@ -1,5 +1,6 @@
  --[[
 
+
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
@@ -129,6 +130,19 @@ vim.o.smartcase = true
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
 
+-- Left padding (adjust number 0-9 to taste)
+vim.o.foldcolumn = '6'
+
+-- Disable foldcolumn for special buffers (neo-tree, etc.)
+vim.api.nvim_create_autocmd('BufEnter', {
+  callback = function()
+    local dominated_bufs = { 'neo-tree', 'help', 'qf', 'lazy', 'mason', 'terminal', 'noice' }
+    if vim.tbl_contains(dominated_bufs, vim.bo.filetype) or vim.bo.buftype ~= '' then
+      vim.opt_local.foldcolumn = '0'
+    end
+  end,
+})
+
 -- Decrease update time
 vim.o.updatetime = 1000 -- CursorHold delay (1 second for auto-hover)
 
@@ -192,9 +206,36 @@ vim.keymap.set('n', '<C-a>', 'ggVG', { desc = 'Select all' })
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
--- Center buffer after half-page scroll
+-- Center buffer after navigation movements
 vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center' })
 vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center' })
+
+-- Center after search navigation
+vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result and center' })
+vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Prev search result and center' })
+vim.keymap.set('n', '*', '*zz', { desc = 'Search word forward and center' })
+vim.keymap.set('n', '#', '#zz', { desc = 'Search word backward and center' })
+
+-- Center after line jumps (G, gg, line numbers)
+vim.keymap.set('n', 'G', 'Gzz', { desc = 'Go to line and center' })
+vim.keymap.set('n', 'gg', 'ggzz', { desc = 'Go to top and center' })
+
+-- Center after jumping with marks
+vim.keymap.set('n', "'", "''zz", { desc = 'Jump to mark line and center' })
+vim.keymap.set('n', '`', '``zz', { desc = 'Jump to mark and center' })
+
+-- Center after jumplist navigation
+vim.keymap.set('n', '<C-o>', '<C-o>zz', { desc = 'Jump back and center' })
+vim.keymap.set('n', '<C-i>', '<C-i>zz', { desc = 'Jump forward and center' })
+
+-- Center after paragraph/section jumps
+vim.keymap.set('n', '{', '{zz', { desc = 'Prev paragraph and center' })
+vim.keymap.set('n', '}', '}zz', { desc = 'Next paragraph and center' })
+vim.keymap.set('n', '[[', '[[zz', { desc = 'Prev section and center' })
+vim.keymap.set('n', ']]', ']]zz', { desc = 'Next section and center' })
+
+-- Center after bracket matching
+vim.keymap.set('n', '%', '%zz', { desc = 'Match bracket and center' })
 
 -- Move lines up/down: configured via mini.move (see mini.nvim config below)
 -- Use Shift+Arrow keys to move lines/selections (hold Shift, press arrows repeatedly)
@@ -222,6 +263,12 @@ vim.keymap.set('n', '<C-Left>', '<C-w><C-h>', { desc = 'Move focus to the left w
 vim.keymap.set('n', '<C-Right>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-Down>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-Up>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- duplicate to see if it works with hjkl
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
