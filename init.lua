@@ -144,7 +144,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
 })
 
 -- Decrease update time
-vim.o.updatetime = 1000 -- CursorHold delay (1 second for auto-hover)
+vim.o.updatetime = 250 -- CursorHold delay (faster hover/diagnostics)
 
 -- Rounded borders on all floating windows (NvChad style)
 vim.o.winborder = 'rounded'
@@ -380,11 +380,11 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
+  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
-  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below automatically loads all plugins from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
