@@ -3,7 +3,6 @@
 
 return {
   'coder/claudecode.nvim',
-  dependencies = { 'folke/snacks.nvim' },
   keys = {
     { '<leader>ac', '<cmd>ClaudeCode<cr>', mode = { 'n' }, desc = '[A]I [C]laude toggle' },
     { '<leader>af', '<cmd>ClaudeCodeFocus<cr>', mode = { 'n' }, desc = '[A]I [F]ocus Claude' },
