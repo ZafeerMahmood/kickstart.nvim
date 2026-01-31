@@ -58,6 +58,16 @@ return {
 
     require('telescope').setup {
       defaults = {
+        vimgrep_arguments = {
+          'rg',
+          '--color=never',
+          '--no-heading',
+          '--with-filename',
+          '--line-number',
+          '--column',
+          '--smart-case',
+          '--path-separator', '/',
+        },
         mappings = {
           i = {
             ['<CR>'] = center_after_select,
@@ -84,35 +94,30 @@ return {
     vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
     vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
     vim.keymap.set('n', '<C-p>', function()
-      -- Common dependency directories to exclude
-      local excludes = '.git node_modules venv env .venv .env __pycache__ .cache dist build vendor bower_components .tox .mypy_cache .pytest_cache target .cargo'
-      local exclude_args = ''
-      for dir in excludes:gmatch '%S+' do
-        exclude_args = exclude_args .. ' --exclude ' .. dir
-      end
-      local cmd = string.format(
-        '((fd --type f --hidden%s --path-separator /) + (fd --type f --no-ignore --extension md%s --path-separator /)) | Sort-Object -Unique',
-        exclude_args,
-        exclude_args
-      )
       builtin.find_files {
-        hidden = true,
-        file_ignore_patterns = { '%.git[/\\]' },
-        find_command = { 'powershell', '-NoProfile', '-Command', cmd },
+        find_command = {
+          'fd', '--type', 'f', '--hidden', '--no-ignore', '--path-separator', '/',
+          '--exclude', '.git',
+          '--exclude', 'node_modules',
+          '--exclude', 'venv',
+          '--exclude', '.venv',
+          '--exclude', '__pycache__',
+          '--exclude', '.cache',
+          '--exclude', 'dist',
+          '--exclude', 'build',
+          '--exclude', 'target',
+          '--exclude', '.cargo',
+          '--exclude', '.tox',
+          '--exclude', '.mypy_cache',
+          '--exclude', '.pytest_cache',
+          '--exclude', 'vendor',
+          '--exclude', 'bower_components',
+        },
       }
     end, { desc = 'Find Files (Ctrl+P)' })
     vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-    vim.keymap.set('n', '<leader>sw', function()
-      builtin.grep_string {
-        additional_args = { '--path-separator', '/' },
-      }
-    end, { desc = '[S]earch current [W]ord' })
-
-    vim.keymap.set('n', '<C-g>', function()
-      builtin.live_grep {
-        additional_args = { '--path-separator', '/' },
-      }
-    end, { desc = '[S]earch by [G]rep' })
+    vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+    vim.keymap.set('n', '<C-g>', builtin.live_grep, { desc = '[S]earch by [G]rep' })
 
     vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
     vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
@@ -134,7 +139,6 @@ return {
       builtin.live_grep {
         grep_open_files = true,
         prompt_title = 'Live Grep in Open Files',
-        additional_args = { '--path-separator', '/' },
       }
     end, { desc = '[S]earch [/] in Open Files' })
 

@@ -71,6 +71,7 @@ local function colorscheme_picker()
 end
 
 return {
+  -- Primary theme (loads saved colorscheme on startup)
   {
     'ZafeerMahmood/unknown-decay.nvim',
     name = 'unknown-decay',
@@ -87,13 +88,24 @@ return {
           variables = false,
         },
       }
+
+      -- Load saved colorscheme or default to unknown-decay
+      local saved = load_saved_colorscheme()
+      if saved and saved ~= '' then
+        local ok, _ = pcall(vim.cmd.colorscheme, saved)
+        if not ok then
+          vim.cmd.colorscheme 'unknown-decay'
+        end
+      else
+        vim.cmd.colorscheme 'unknown-decay'
+      end
     end,
   },
 
   {
     'catppuccin/nvim',
     name = 'catppuccin',
-    lazy = false,
+    lazy = true,
     priority = 1000,
     opts = {
       flavour = 'mocha',
@@ -112,7 +124,7 @@ return {
   {
     'rose-pine/neovim',
     name = 'rose-pine',
-    lazy = false,
+    lazy = true,
     priority = 1000,
     opts = {
       variant = 'auto',
@@ -121,9 +133,19 @@ return {
       },
     },
   },
-  -- ═══════════════════════════════════════════════════════════════════════════
-  -- COLORSCHEME SYSTEM
-  -- ═══════════════════════════════════════════════════════════════════════════
+
+  {
+    'folke/tokyonight.nvim',
+    lazy = true,
+    priority = 1000,
+    opts = {
+      styles = {
+        comments = { italic = false },
+      },
+    },
+  },
+
+  -- Colorscheme picker keymap
   {
     'nvim-telescope/telescope.nvim',
     optional = true,
@@ -134,30 +156,5 @@ return {
         desc = '[C]olor[s]cheme picker (persistent)',
       },
     },
-  },
-
-  -- Auto-load saved colorscheme on startup
-  {
-    'folke/tokyonight.nvim', -- Use tokyonight as the trigger plugin (it's always loaded)
-    priority = 1000,
-    config = function()
-      -- Setup tokyonight
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false },
-        },
-      }
-
-      -- Load saved colorscheme or default to unknown-decay
-      local saved = load_saved_colorscheme()
-      if saved and saved ~= '' then
-        local ok, _ = pcall(vim.cmd.colorscheme, saved)
-        if not ok then
-          vim.cmd.colorscheme 'unknown-decay'
-        end
-      else
-        vim.cmd.colorscheme 'unknown-decay'
-      end
-    end,
   },
 }

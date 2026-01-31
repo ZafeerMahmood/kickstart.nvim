@@ -373,25 +373,6 @@ return {
         },
       },
 
-      -- Spell checking (LSP-based, use gra for corrections)
-      -- NOTE: Disabled - ltex-ls is a heavy Java LSP (90+ JARs) that slows startup
-      -- Uncomment if you need spell checking in markdown/text files
-      -- ltex = {
-      --   filetypes = {
-      --     'markdown', 'text', 'tex', 'plaintex', 'rst', 'org',
-      --     'gitcommit', 'gitrebase',
-      --   },
-      --   settings = {
-      --     ltex = {
-      --       language = 'en-US',
-      --       dictionary = {
-      --         ['en-US'] = {},
-      --       },
-      --       checkFrequency = 'edit',
-      --     },
-      --   },
-      -- },
-
       lua_ls = {
         -- cmd = { ... },
         -- filetypes = { ... },
