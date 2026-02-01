@@ -109,6 +109,20 @@ return {
     priority = 1000,
     opts = {
       flavour = 'mocha',
+      styles = {
+        comments = { 'italic' },
+        conditionals = { 'italic' },
+        loops = { 'italic' },
+        functions = {},        -- keep normal
+        keywords = { 'italic' },
+        strings = {},
+        variables = {},
+        numbers = {},
+        booleans = { 'italic' },
+        properties = {},
+        types = {},
+        operators = {},
+      },
       integrations = {
         neo_tree = true,
         telescope = true,
@@ -124,7 +138,7 @@ return {
   {
     'rose-pine/neovim',
     name = 'rose-pine',
-    lazy = true,
+    lazy = false,
     priority = 1000,
     opts = {
       variant = 'auto',
@@ -136,7 +150,7 @@ return {
 
   {
     'folke/tokyonight.nvim',
-    lazy = true,
+    lazy = false,
     priority = 1000,
     opts = {
       styles = {
