@@ -5,4 +5,21 @@
 return {
   'hiphish/rainbow-delimiters.nvim',
   event = 'BufReadPost',
+  config = function()
+    local rainbow = require('rainbow-delimiters')
+    require('rainbow-delimiters.setup').setup {
+      strategy = {
+        [''] = rainbow.strategy['global'],
+        tsx = rainbow.strategy['global'],
+        typescriptreact = rainbow.strategy['global'],
+      },
+      query = {
+        [''] = 'rainbow-delimiters',
+        tsx = 'rainbow-parens',
+        typescriptreact = 'rainbow-parens',
+        javascript = 'rainbow-parens',
+        javascriptreact = 'rainbow-parens',
+      },
+    }
+  end,
 }
