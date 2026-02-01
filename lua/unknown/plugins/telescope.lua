@@ -98,18 +98,24 @@ return {
         find_command = {
           'fd', '--type', 'f', '--hidden', '--no-ignore', '--path-separator', '/',
           '--exclude', '.git',
-          '--exclude', 'node_modules',
+          -- python related ignores
+          '--exclude', 'env',
           '--exclude', 'venv',
           '--exclude', '.venv',
+          '--exclude', '.ruff_cache',
+          '--exclude', '.pytest_cache',
           '--exclude', '__pycache__',
-          '--exclude', '.cache',
+          '--exclude', '.mypy_cache',
+          -- node related ignores
+          '--exclude', 'node_modules',
+          '--exclude', '.next',
           '--exclude', 'dist',
           '--exclude', 'build',
+          -- general
+          '--exclude', '.cache',
           '--exclude', 'target',
           '--exclude', '.cargo',
           '--exclude', '.tox',
-          '--exclude', '.mypy_cache',
-          '--exclude', '.pytest_cache',
           '--exclude', 'vendor',
           '--exclude', 'bower_components',
         },
