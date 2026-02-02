@@ -92,12 +92,11 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 
--- Use cmd for shell commands (faster than pwsh on Windows)
--- toggleterm keeps its own pwsh shell setting
-vim.o.shell = 'cmd'
-vim.o.shellcmdflag = '/s /c'
+-- Use pwsh with minimal config for faster startup
+vim.o.shell = 'pwsh'
+vim.o.shellcmdflag = '-NoLogo -NoProfile -Command'
 vim.o.shellquote = ''
-vim.o.shellxquote = '('
+vim.o.shellxquote = ''
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
