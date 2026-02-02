@@ -1,6 +1,7 @@
 return {
   "norcalli/nvim-colorizer.lua",
-  config = function ()
+  cmd = { "ColorizerToggle", "ColorizerAttachToBuffer" },
+  config = function()
     require('colorizer').setup({
       "*",
       css = { rgb_fn = true },

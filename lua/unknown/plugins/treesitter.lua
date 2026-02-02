@@ -15,8 +15,6 @@ return {
         'gitcommit', 'gitignore',
       },
 
-      auto_install = true,
-
       install = {
         prefer_git = false,
         compilers = { 'zig', 'gcc', 'clang', 'cl' },
