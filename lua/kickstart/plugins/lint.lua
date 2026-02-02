@@ -29,13 +29,19 @@ return {
 
       -- Autocommand for nvim-lint
       local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
+      local timer = nil
       -- NOTE: add 'BufEnter' when needed
-      vim.api.nvim_create_autocmd({'BufWritePost', 'InsertLeave' }, {
+      vim.api.nvim_create_autocmd({ 'BufWritePost', 'InsertLeave' }, {
         group = lint_augroup,
         callback = function()
-          if vim.bo.modifiable then
-            lint.try_lint()
+          if timer then
+            timer:stop()
           end
+          timer = vim.defer_fn(function()
+            if vim.bo.modifiable then
+              lint.try_lint()
+            end
+          end, 100)
         end,
       })
 
