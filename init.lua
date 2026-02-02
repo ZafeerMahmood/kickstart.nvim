@@ -92,6 +92,13 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 
+-- Use cmd for shell commands (faster than pwsh on Windows)
+-- toggleterm keeps its own pwsh shell setting
+vim.o.shell = 'cmd'
+vim.o.shellcmdflag = '/s /c'
+vim.o.shellquote = ''
+vim.o.shellxquote = '('
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
@@ -131,7 +138,7 @@ vim.o.smartcase = true
 vim.o.signcolumn = 'yes'
 
 -- Left padding (adjust number 0-9 to taste)
-vim.o.foldcolumn = '6'
+vim.o.foldcolumn = '9'
 
 -- Disable foldcolumn for special buffers (neo-tree, etc.)
 vim.api.nvim_create_autocmd('BufEnter', {
