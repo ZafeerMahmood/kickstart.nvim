@@ -16,7 +16,9 @@
       vim.o.foldenable = true
     end,
     opts = {
-      provider_selector = function(_, filetype, _)
+      provider_selector = function(bufnr, filetype, _)
+        -- Skip special buffers (diffview, terminals, etc.)
+        if vim.bo[bufnr].buftype ~= '' then return '' end
         local indent_filetypes = { 'markdown', 'text', 'txt' }
         if vim.tbl_contains(indent_filetypes, filetype) then
           return { 'indent' }

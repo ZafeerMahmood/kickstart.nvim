@@ -7,11 +7,6 @@ return {
   event = 'BufRead',
   opts = {
     hl_priority = 120,
-    excluded_argnames = {
-      usages = {
-        lua = { 'self' },
-        python = { 'self', 'cls' },
-      },
-    },
+    excluded_filetypes = { 'DiffviewFiles', 'DiffviewFileHistory', 'diff' },
   },
 }

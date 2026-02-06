@@ -20,6 +20,9 @@ return {
       changedelete = { text = '~' },
     },
     on_attach = function(bufnr)
+      -- Skip special buffers (diffview, terminals, etc.)
+      if vim.bo[bufnr].buftype ~= '' then return end
+
       local gitsigns = require 'gitsigns'
 
       local function map(mode, l, r, opts)
