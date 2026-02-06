@@ -14,6 +14,13 @@
       vim.o.foldlevel = 99
       vim.o.foldlevelstart = 99
       vim.o.foldenable = true
+      -- hide the foldcolumn guides/chars
+      vim.opt.fillchars:append({
+        fold = " ",
+        foldopen = " ",
+        foldclose = " ",
+        foldsep = " ",
+      }) 
     end,
     opts = {
       provider_selector = function(bufnr, filetype, _)
