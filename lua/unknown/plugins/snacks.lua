@@ -9,7 +9,7 @@ return {
   opts = function()
     local ascii = require('ascii')
     return {
-      bigfile = { enabled = true },
+      bigfile = { enabled = true, size = 1.5 * 1024 * 1024 },
       dashboard = {
         enabled = true,
         preset = {

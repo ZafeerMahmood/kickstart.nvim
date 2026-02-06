@@ -65,6 +65,13 @@ return {
         --  Most Language Servers support renaming across files, etc.
         map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
 
+        -- LSP hover
+        map('K', vim.lsp.buf.hover, 'Hover Documentation')
+
+        -- Convenience aliases (distro-style)
+        map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
+        map('<leader>cr', vim.lsp.buf.rename, '[C]ode [R]ename')
+
         -- Execute a code action, usually your cursor needs to be on top of an error
         -- or a suggestion from your LSP for this to activate.
         map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
@@ -214,14 +221,15 @@ return {
       severity_sort = true,
       float = { border = 'rounded', source = 'if_many' },
       underline = { severity = vim.diagnostic.severity.ERROR },
-      signs = vim.g.have_nerd_font and {
-        text = {
-          [vim.diagnostic.severity.ERROR] = '󰅚 ',
-          [vim.diagnostic.severity.WARN] = '󰀪 ',
-          [vim.diagnostic.severity.INFO] = '󰋽 ',
-          [vim.diagnostic.severity.HINT] = '󰌶 ',
-        },
-      } or {},
+      -- signs = vim.g.have_nerd_font and {
+      --   text = {
+      --     [vim.diagnostic.severity.ERROR] = '󰅚 ',
+      --     [vim.diagnostic.severity.WARN] = '󰀪 ',
+      --     [vim.diagnostic.severity.INFO] = '󰋽 ',
+      --     [vim.diagnostic.severity.HINT] = '󰌶 ',
+      --   },
+      -- } or {},
+      signs = false,
       virtual_text = {
         source = 'if_many',
         spacing = 2,

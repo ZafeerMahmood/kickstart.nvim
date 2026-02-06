@@ -3,7 +3,7 @@
 
 return {
   'saghen/blink.cmp',
-  event = 'VimEnter',
+  event = 'InsertEnter',
   version = '1.*',
   dependencies = {
     -- Snippet Engine
@@ -65,6 +65,7 @@ return {
       ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
       ['<C-n>'] = { 'show', 'select_next' },
       ['<C-p>'] = { 'show', 'select_prev' },
+      ['<CR>'] = { 'accept', 'fallback' },
 
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps

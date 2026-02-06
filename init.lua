@@ -137,7 +137,7 @@ vim.o.smartcase = true
 vim.o.signcolumn = 'yes'
 
 -- Left padding (adjust number 0-9 to taste)
-vim.o.foldcolumn = '9'
+vim.o.foldcolumn = '6'
 
 -- Disable foldcolumn for special buffers (neo-tree, etc.)
 vim.api.nvim_create_autocmd('BufEnter', {
@@ -181,6 +181,9 @@ vim.o.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.o.scrolloff = 8
+
+-- Performance: don't highlight past column 240 (long lines)
+vim.o.synmaxcol = 240
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
@@ -248,6 +251,9 @@ vim.keymap.set('n', '%', '%zz', { desc = 'Match bracket and center' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+vim.keymap.set('n', '<leader>/', 'gcc', { desc = 'Toggle comment', remap = true })
+vim.keymap.set('v', '<leader>/', 'gc', { desc = 'Toggle comment', remap = true })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which

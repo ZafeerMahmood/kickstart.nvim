@@ -3,7 +3,7 @@
 
 return {
   'folke/which-key.nvim',
-  event = 'VimEnter',
+  event = 'VeryLazy',
   opts = {
     -- Delay between pressing a key and opening which-key (milliseconds)
     -- This setting is independent of vim.o.timeoutlen
@@ -47,10 +47,17 @@ return {
 
     -- Document existing key chains
     spec = {
+     { '<leader>a', group = '[A]I Claude' },
+      { '<leader>b', group = '[B]uffer' },
+      { '<leader>c', group = '[C]ode' },
+      { '<leader>g', group = '[G]it' },
+      { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+      { '<leader>l', group = '[L]int' },
+      -- { '<leader>m', group = '[M]ark (Harpoon)' },
+      -- { '<leader>q', group = '[Q]uit' },
       { '<leader>s', group = '[S]earch' },
       { '<leader>t', group = '[T]oggle' },
-      { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-      { '<leader>m', group = '[M]ark (Harpoon)' },
+      -- { '<leader>w', group = '[W]indow' },
     },
   },
 }

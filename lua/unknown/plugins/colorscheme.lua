@@ -106,7 +106,6 @@ return {
     'catppuccin/nvim',
     name = 'catppuccin',
     lazy = false,
-    priority = 1000,
     opts = {
       flavour = 'mocha',
       styles = {
@@ -139,7 +138,6 @@ return {
     'rose-pine/neovim',
     name = 'rose-pine',
     lazy = false,
-    priority = 1000,
     opts = {
       variant = 'auto',
       styles = {
@@ -151,7 +149,6 @@ return {
   {
     'folke/tokyonight.nvim',
     lazy = false,
-    priority = 1000,
     opts = {
       styles = {
         comments = { italic = false },
