@@ -11,14 +11,14 @@ return {
   },
   cmd = { 'Neotree' },
   keys = {
-    { '<C-b>', ':Neotree toggle<CR>', desc = 'NeoTree toggle', silent = true },
+    { '<leader>e', ':Neotree toggle<CR>', desc = 'NeoTree toggle', silent = true },
   },
   opts = {
     close_if_last_window = true,
     window = {
-      width = 30,
+      position = 'float',
       mappings = {
-        ['<C-b>'] = 'close_window',
+        ['<leader>e'] = 'close_window',
       },
     },
     filesystem = {

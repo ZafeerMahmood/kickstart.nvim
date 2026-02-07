@@ -27,7 +27,7 @@ return {
   keys = {
     { '<leader>sh', function() require('telescope.builtin').help_tags() end, desc = '[S]earch [H]elp' },
     { '<leader>sk', function() require('telescope.builtin').keymaps() end, desc = '[S]earch [K]eymaps' },
-    { '<C-p>', function()
+    { '<leader>sf', function()
       require('telescope.builtin').find_files {
         find_command = {
           'fd', '--type', 'f', '--hidden', '--no-ignore', '--path-separator', '/',
@@ -54,7 +54,7 @@ return {
     end, desc = 'Find Files (Ctrl+P)' },
     { '<leader>ss', function() require('telescope.builtin').builtin() end, desc = '[S]earch [S]elect Telescope' },
     { '<leader>sw', function() require('telescope.builtin').grep_string() end, desc = '[S]earch current [W]ord' },
-    { '<C-g>', function() require('telescope.builtin').live_grep() end, desc = '[S]earch by [G]rep' },
+    { '<leader>sg', function() require('telescope.builtin').live_grep() end, desc = '[S]earch by [G]rep' },
     { '<leader>sd', function() require('telescope.builtin').diagnostics() end, desc = '[S]earch [D]iagnostics' },
     { '<leader>sr', function() require('telescope.builtin').resume() end, desc = '[S]earch [R]esume' },
     { '<leader>s.', function() require('telescope.builtin').oldfiles() end, desc = '[S]earch Recent Files ("." for repeat)' },
@@ -91,6 +91,14 @@ return {
 
     require('telescope').setup {
       defaults = {
+        path_display = function(_, path)
+          local tail = vim.fn.fnamemodify(path, ':t')
+          local dir = vim.fn.fnamemodify(path, ':h')
+          if dir == '.' then
+            return tail
+          end
+          return tail .. '  ' .. dir
+        end,
         vimgrep_arguments = {
           'rg',
           '--color=never',

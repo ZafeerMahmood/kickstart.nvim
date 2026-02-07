@@ -156,6 +156,44 @@ return {
     },
   },
 
+  {
+    'ellisonleao/gruvbox.nvim',
+    name = 'gruvbox',
+    lazy = false,
+    opts = {
+      contrast = 'hard',
+      italic = {
+        strings = false,
+        comments = true,
+        operators = false,
+      },
+    },
+  },
+
+  {
+    'sainnhe/gruvbox-material',
+    name = 'gruvbox-material',
+    lazy = false,
+    config = function()
+      vim.g.gruvbox_material_background = 'hard'
+      vim.g.gruvbox_material_enable_italic = 1
+    end,
+  },
+
+  {
+    'EdenEast/nightfox.nvim',
+    name = 'nightfox',
+    lazy = false,
+    opts = {
+      options = {
+        styles = {
+          comments = 'italic',
+          keywords = 'bold',
+        },
+      },
+    },
+  },
+
   -- Colorscheme picker keymap
   {
     'nvim-telescope/telescope.nvim',

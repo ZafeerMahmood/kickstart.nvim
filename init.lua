@@ -137,7 +137,7 @@ vim.o.smartcase = true
 vim.o.signcolumn = 'yes'
 
 -- Left padding (adjust number 0-9 to taste)
-vim.o.foldcolumn = '6'
+vim.o.foldcolumn = '5'
 
 -- Disable foldcolumn for special buffers (neo-tree, etc.)
 vim.api.nvim_create_autocmd('BufEnter', {
@@ -260,7 +260,6 @@ vim.keymap.set('v', '<leader>/', 'gc', { desc = 'Toggle comment', remap = true }
 -- is not what someone will guess without a bit more experience.
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 vim.keymap.set('t', '<C-\\>', '<C-\\><C-n>', { desc = 'Exit terminal mode (Ctrl+\\)' })
-
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
@@ -275,8 +274,6 @@ vim.keymap.set('n', '<C-Left>', '<C-w><C-h>', { desc = 'Move focus to the left w
 vim.keymap.set('n', '<C-Right>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-Down>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-Up>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
--- duplicate to see if it works with hjkl
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
@@ -293,7 +290,6 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.keymap.set('n', '<leader>r', function()
   local word = vim.fn.expand '<cword>'
   if word ~= '' then
-    -- Escape special regex characters in the word
     word = vim.fn.escape(word, [[/\.*$^~[]])
     vim.fn.feedkeys(':%s/' .. word .. '/', 'n')
   else
@@ -302,6 +298,7 @@ vim.keymap.set('n', '<leader>r', function()
 end, { desc = '[R]eplace word in buffer' })
 
 -- Visual mode: replace selected text
+-- TODO: add  an interactive way for search and replace, search an replace line by line and search and replace all
 vim.keymap.set('v', '<leader>r', 'y:%s/<C-r>"/', { desc = '[R]eplace selection in buffer' })
 
 -- [[ Basic Autocommands ]]
@@ -351,48 +348,9 @@ rtp:prepend(lazypath)
 --  To update plugins you can run
 --    :Lazy update
 --
--- NOTE: Here is where you install your plugins.
---
--- Plugin files in lua/custom/plugins/:
---   alpha.lua              - Dashboard/startup screen
---   bufferline.lua         - VS Code-like tabs
---   claudecode.lua         - AI coding assistant
---   colorscheme.lua        - Theme management
---   comment.lua            - Toggle comments (gcc)
---   completion.lua         - Autocompletion (blink.cmp)
---   conform.lua            - Code formatting
---   diffview.lua           - Git diff viewer
---   flash.lua              - Fast navigation
---   folding.lua            - Code folding (nvim-ufo)
---   gitsigns.lua           - Git signs in gutter
---   guess-indent.lua       - Auto-detect indentation
---   harpoon.lua            - Quick file switching
---   hlargs.lua             - Highlight function arguments
---   lazydev.lua            - Lua LSP for Neovim config
---   lazygit.lua            - Git UI
---   lsp.lua                - LSP + Mason configuration
---   lualine.lua            - Statusline
---   mini.lua               - Mini plugin collection
---   rainbow-delimiters.lua - Colorful brackets
---   telescope.lua          - Fuzzy finder
---   todo-comments.lua      - Highlight TODOs
---   toggleterm.lua         - Integrated terminal
---   treesitter.lua         - Syntax highlighting
---   which-key.lua          - Keybind hints
--- =============================================================================
-
 require('lazy').setup({
-  -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
-  -- init.lua. If you want these files, they are in the repository, so you can just download them and
-  -- place them in the correct locations.
-
   -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
-  --
-  --  Here are some example plugins that I've included in the Kickstart repository.
-  --  Uncomment any of the lines below to enable them (you will need to restart nvim).
-  --
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
@@ -401,7 +359,6 @@ require('lazy').setup({
   -- NOTE: The import below automatically loads all plugins from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --    Each .lua file in that directory should return a plugin spec table.
-  --    change be changed to a personalizename 'youRock' then { impoer = 'youRock.plugins'}
   { import = 'unknown.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`

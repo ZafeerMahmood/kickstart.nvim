@@ -20,7 +20,7 @@
         foldopen = " ",
         foldclose = " ",
         foldsep = " ",
-      }) 
+      })
     end,
     opts = {
       provider_selector = function(bufnr, filetype, _)

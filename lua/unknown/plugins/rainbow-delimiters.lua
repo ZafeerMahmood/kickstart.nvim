@@ -12,6 +12,7 @@ return {
         [''] = rainbow.strategy['global'],
         tsx = rainbow.strategy['global'],
         typescriptreact = rainbow.strategy['global'],
+        markdown = rainbow.strategy['noop'],
       },
       query = {
         [''] = 'rainbow-delimiters',
