@@ -136,8 +136,9 @@ vim.o.smartcase = true
 -- Keep signcolumn on by default
 vim.o.signcolumn = 'yes'
 
--- Left padding (adjust number 0-9 to taste)
-vim.o.foldcolumn = '5'
+-- Left padding via statuscolumn (foldcolumn disabled to avoid fold level numbers)
+vim.o.foldcolumn = '0'
+vim.o.statuscolumn = string.rep(" ", 7) .. "%=%l %s"
 
 -- Disable foldcolumn for special buffers (neo-tree, etc.)
 vim.api.nvim_create_autocmd('BufEnter', {
@@ -198,6 +199,12 @@ vim.o.expandtab = true
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+
+-- Change without yanking (send to black hole register)
+vim.keymap.set('n', 'c', '"_c', { desc = 'Change without yanking' })
+vim.keymap.set('n', 'C', '"_C', { desc = 'Change to EOL without yanking' })
+vim.keymap.set('v', 'c', '"_c', { desc = 'Change without yanking' })
+vim.keymap.set('v', 'C', '"_C', { desc = 'Change without yanking' })
 
 -- Windows-style keymaps (in addition to Vim defaults: y=yank, p=paste, u=undo, C-r=redo)
 -- Copy: Ctrl+C in visual mode yanks to clipboard
