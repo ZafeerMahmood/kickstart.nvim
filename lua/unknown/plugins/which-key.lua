@@ -5,8 +5,7 @@ return {
   'folke/which-key.nvim',
   event = 'VeryLazy',
   opts = {
-    -- Delay between pressing a key and opening which-key (milliseconds)
-    -- This setting is independent of vim.o.timeoutlen
+    preset = 'modern',
     delay = 0,
     icons = {
       -- Set icon mappings to true if you have a Nerd Font
@@ -47,17 +46,22 @@ return {
 
     -- Document existing key chains
     spec = {
-     { '<leader>a', group = '[A]I Claude' },
-      { '<leader>b', group = '[B]uffer' },
-      { '<leader>c', group = '[C]ode' },
-      { '<leader>g', group = '[G]it' },
-      { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-      { '<leader>l', group = '[L]int' },
-      -- { '<leader>m', group = '[M]ark (Harpoon)' },
-      -- { '<leader>q', group = '[Q]uit' },
-      { '<leader>s', group = '[S]earch' },
-      { '<leader>t', group = '[T]oggle' },
-      -- { '<leader>w', group = '[W]indow' },
+      { '<leader>a', group = '[A]I Claude', icon = { icon = ' ', color = 'orange' } },
+      { '<leader>b', group = '[B]uffer', icon = { icon = '󰈔 ', color = 'cyan' } },
+      { '<leader>c', group = '[C]ode', icon = { icon = ' ', color = 'blue' } },
+      { '<leader>g', group = '[G]it', icon = { icon = '󰊢 ', color = 'red' } },
+      { '<leader>h', group = 'Git [H]unk', icon = { icon = ' ', color = 'green' }, mode = { 'n', 'v' } },
+      { '<leader>l', group = '[L]int', icon = { icon = '󱉶 ', color = 'yellow' } },
+      { '<leader>s', group = '[S]earch', icon = { icon = ' ', color = 'purple' } },
+      { '<leader>t', group = '[T]oggle', icon = { icon = ' ', color = 'azure' } },
+      { '<leader>e', icon = { icon = '󰙅 ', color = 'green' } },
+      { '<leader>f', icon = { icon = '󰉢 ', color = 'blue' } },
+      { '<leader>q', icon = { icon = ' ', color = 'red' } },
+      { '<leader>r', icon = { icon = '󰛔 ', color = 'orange' } },
+      { '<leader>x', icon = { icon = '󰅖 ', color = 'red' } },
+      { '<leader>X', icon = { icon = '󰅗 ', color = 'red' } },
+      { '<leader>z', icon = { icon = '⚡', color = 'yellow' } },
+      { '<leader>/', icon = { icon = '󰆉 ', color = 'grey' } },
     },
   },
 }
