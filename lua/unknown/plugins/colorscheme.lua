@@ -27,10 +27,17 @@ local function colorscheme_picker()
   local pickers = require 'telescope.pickers'
   local finders = require 'telescope.finders'
   local conf = require('telescope.config').values
-  local previewers = require 'telescope.previewers'
 
-  -- Get all available colorschemes
-  local colors = vim.fn.getcompletion('', 'color')
+  -- Filter out default Neovim colorschemes
+  local DEFAULT_SCHEMES = {
+    'blue', 'darkblue', 'default', 'delek', 'desert', 'elflord', 'evening',
+    'habamax', 'industry', 'koehler', 'lunaperche', 'morning', 'murphy',
+    'pablo', 'peachpuff', 'quiet', 'retrobox', 'ron', 'shine', 'slate',
+    'sorbet', 'torte', 'unokai', 'vim', 'wildcharm', 'zaibatsu', 'zellner',
+  }
+  local defaults = {}
+  for _, s in ipairs(DEFAULT_SCHEMES) do defaults[s] = true end
+  local colors = vim.tbl_filter(function(c) return not defaults[c] end, vim.fn.getcompletion('', 'color'))
 
   -- Store original colorscheme for preview restore on cancel
   local original = vim.g.colors_name or 'default'
