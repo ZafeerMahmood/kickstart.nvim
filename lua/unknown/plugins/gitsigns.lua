@@ -6,11 +6,12 @@ return {
   event = 'BufReadPost',
   opts = {
     signs = {
-      add = { text = '│' },
-      change = { text = '│' },
-      delete = { text = '│' },
-      topdelete = { text = '│' },
+      add = { text = '┃' },
+      change = { text = '┃' },
+      delete = { text = '┃' },
+      topdelete = { text = '┃' },
       changedelete = { text = '~' },
+      untracked = { text = '┆' },
     },
     signs_staged = {
       add = { text = '│' },
@@ -19,12 +20,11 @@ return {
       topdelete = { text = '│' },
       changedelete = { text = '~' },
     },
+    current_line_blame = true,
     on_attach = function(bufnr)
       -- Skip special buffers (diffview, terminals, etc.)
       if vim.bo[bufnr].buftype ~= '' then return end
-
       local gitsigns = require 'gitsigns'
-
       local function map(mode, l, r, opts)
         opts = opts or {}
         opts.buffer = bufnr
@@ -60,7 +60,7 @@ return {
       map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'git [s]tage hunk' })
       map('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'git [r]eset hunk' })
       map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'git [S]tage buffer' })
-      map('n', '<leader>hu', gitsigns.stage_hunk, { desc = 'git [u]ndo stage hunk' })
+      map('n', '<leader>hu', gitsigns.undo_stage_hunk, { desc = 'git [u]ndo stage hunk' })
       map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
       map('n', '<leader>hp', gitsigns.preview_hunk, { desc = 'git [p]review hunk' })
       map('n', '<leader>hb', gitsigns.blame_line, { desc = 'git [b]lame line' })
