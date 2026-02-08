@@ -60,7 +60,6 @@ return {
       --
       -- See :h blink-cmp-config-keymap for defining your own keymap
       preset = 'super-tab', -- Tab to accept (VSCode-like)
-
       -- Manual completion trigger: Ctrl+Space opens menu (no auto-popup)
       ['<C-Space>'] = { 'show', 'show_documentation', 'hide_documentation' },
       ['<C-n>'] = { 'show', 'select_next' },

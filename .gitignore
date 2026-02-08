@@ -4,6 +4,6 @@ test.sh
 nvim
 
 spell/
-CLAUDE.md
+.claude/*
 guide.md
 todo.md
