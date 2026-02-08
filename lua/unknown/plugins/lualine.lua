@@ -26,6 +26,15 @@ return {
       },
       lualine_x = {
         {
+          function()
+            local reg = vim.fn.reg_recording()
+            if reg ~= '' then return ' @' .. reg end
+            return ''
+          end,
+          cond = function() return vim.fn.reg_recording() ~= '' end,
+          color = { fg = '#ff6666' },
+        },
+        {
           function() return require('noice').api.status.command.get() end,
           cond = function() return package.loaded['noice'] and require('noice').api.status.command.has() end,
         },
