@@ -101,10 +101,10 @@ return {
       if saved and saved ~= '' then
         local ok, _ = pcall(vim.cmd.colorscheme, saved)
         if not ok then
-          vim.cmd.colorscheme 'unknown-decay'
+          vim.cmd.colorscheme 'catppuccin'
         end
       else
-        vim.cmd.colorscheme 'unknown-decay'
+        vim.cmd.colorscheme 'catppuccin'
       end
     end,
   },
