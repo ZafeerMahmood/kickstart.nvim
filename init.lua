@@ -98,6 +98,11 @@ vim.o.shellcmdflag = '-NoLogo -NoProfile -Command'
 vim.o.shellquote = ''
 vim.o.shellxquote = ''
 
+-- spell check vim
+vim.opt.spell = true
+vim.opt.spelllang = "en_us"
+vim.keymap.set('n', 'z=', function() require('telescope.builtin').spell_suggest() end, { desc = 'Spell suggestions' })
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
@@ -258,6 +263,14 @@ vim.keymap.set('n', '%', '%zz', { desc = 'Match bracket and center' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+-- Diagnostic navigation
+vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1 }) vim.cmd('normal! zz') end, { desc = 'Next diagnostic' })
+vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1 }) vim.cmd('normal! zz') end, { desc = 'Prev diagnostic' })
+vim.keymap.set('n', ']e', function() vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR }) vim.cmd('normal! zz') end, { desc = 'Next error' })
+vim.keymap.set('n', '[e', function() vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR }) vim.cmd('normal! zz') end, { desc = 'Prev error' })
+vim.keymap.set('n', ']w', function() vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.WARN }) vim.cmd('normal! zz') end, { desc = 'Next warning' })
+vim.keymap.set('n', '[w', function() vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.WARN }) vim.cmd('normal! zz') end, { desc = 'Prev warning' })
 
 vim.keymap.set('n', '<leader>/', 'gcc', { desc = 'Toggle comment', remap = true })
 vim.keymap.set('v', '<leader>/', 'gc', { desc = 'Toggle comment', remap = true })
