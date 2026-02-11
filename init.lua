@@ -145,16 +145,6 @@ vim.o.signcolumn = 'yes'
 vim.o.foldcolumn = '0'
 vim.o.statuscolumn = string.rep(" ", 7) .. "%=%l %s"
 
--- Disable foldcolumn for special buffers (neo-tree, etc.)
-vim.api.nvim_create_autocmd('BufEnter', {
-  callback = function()
-    local dominated_bufs = { 'neo-tree', 'help', 'qf', 'lazy', 'mason', 'terminal', 'noice' }
-    if vim.tbl_contains(dominated_bufs, vim.bo.filetype) or vim.bo.buftype ~= '' then
-      vim.opt_local.foldcolumn = '0'
-    end
-  end,
-})
-
 -- Decrease update time
 vim.o.updatetime = 250 -- CursorHold delay (faster hover/diagnostics)
 
