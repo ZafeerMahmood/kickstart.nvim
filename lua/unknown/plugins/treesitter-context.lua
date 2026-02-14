@@ -10,6 +10,6 @@ return {
     multiline_threshold = 1, -- Max lines for single context
   },
   keys = {
-    { '[c', function() require('treesitter-context').go_to_context() end, desc = 'Jump to context' },
+    { '[C', function() require('treesitter-context').go_to_context() end, desc = 'Jump to [C]ontext (treesitter)' },
   },
 }

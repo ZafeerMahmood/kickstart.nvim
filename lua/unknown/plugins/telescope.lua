@@ -71,12 +71,12 @@ return {
         prompt_title = 'Live Grep in Open Files',
       }
     end, desc = '[S]earch [/] in Open Files' },
-    { '<leader>sn', function()
+    { '<leader>sc', function()
       require('telescope.builtin').find_files {
         cwd = vim.fn.stdpath 'config',
         find_command = { 'fd', '--type', 'f', '--hidden', '--exclude', '.git', '--path-separator', '/' },
       }
-    end, desc = '[S]earch [N]eovim files' },
+    end, desc = '[S]earch nvim [C]onfig' },
   },
   config = function()
     local actions = require 'telescope.actions'
