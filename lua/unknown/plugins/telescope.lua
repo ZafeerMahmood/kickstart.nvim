@@ -40,6 +40,7 @@ return {
           '--exclude', '__pycache__',
           '--exclude', '.mypy_cache',
           '--exclude', 'node_modules',
+          '--exclude', '.turbo',
           '--exclude', '.next',
           '--exclude', 'dist',
           '--exclude', 'build',
@@ -113,6 +114,9 @@ return {
           i = {
             ['<CR>'] = center_after_select,
             ['<c-enter>'] = 'to_fuzzy_refine',
+            ['<C-v>'] = function()
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-r>+', true, false, true), 'n', false)
+            end,
           },
           n = {
             ['<CR>'] = center_after_select,
