@@ -4,7 +4,7 @@
 local map = vim.keymap.set
 
 -- Spell suggest via Telescope
-map('n', 'z=', function() require('telescope.builtin').spell_suggest() end, { desc = 'Spell suggestions' })
+-- map('n', 'z=', function() require('telescope.builtin').spell_suggest() end, { desc = 'Spell suggestions' })
 
 -- Change without yanking
 map('n', 'c', '"_c', { desc = 'Change without yanking' })
