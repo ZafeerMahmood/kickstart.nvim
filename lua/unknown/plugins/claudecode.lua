@@ -11,8 +11,6 @@ return {
     { '<leader>am', '<cmd>ClaudeCodeSelectModel<cr>', desc = '[A]I select [M]odel' },
     { '<leader>ab', '<cmd>ClaudeCodeAdd %<cr>', desc = '[A]I add [B]uffer to context' },
     { '<leader>as', '<cmd>ClaudeCodeSend<cr>', mode = 'v', desc = '[A]I [S]end selection' },
-    { '<leader>aa', '<cmd>ClaudeCodeDiffAccept<cr>', desc = '[A]I [A]ccept diff' },
-    { '<leader>ad', '<cmd>ClaudeCodeDiffDeny<cr>', desc = '[A]I [D]eny diff' },
   },
   opts = {
     terminal = {
@@ -22,27 +20,14 @@ return {
         env = { SHELL = 'cmd' }, --WARN: try with "pwsh" or "pwsh -NoProfile"
       },
     },
-    diff_opts = {
-      auto_close_on_accept = true,
-      vertical_split = false,
-      open_in_current_tab = false,
-    },
   },
   config = function(_, opts)
     require('claudecode').setup(opts)
-    -- Force normal mode when entering claudecode diff buffers
-    vim.api.nvim_create_autocmd('BufEnter', {
-      pattern = '*',
-      callback = function()
-        local buftype = vim.bo.buftype
-        if buftype == '' then return end
-        if buftype == 'acwrite' then
-          vim.schedule(function()
-            vim.cmd('stopinsert')
-          end)
-        end
-      end,
-    })
+
+    -- Disable editor diff view — diffs stay in the Claude terminal only
+    local tools = require('claudecode.tools.init')
+    tools.tools['openDiff'] = nil
+    tools.tools['closeAllDiffTabs'] = nil
 
     -- Auto-reload buffers when files change on disk (after diff accept/deny)
     vim.o.autoread = true

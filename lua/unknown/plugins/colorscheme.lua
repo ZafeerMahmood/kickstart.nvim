@@ -152,7 +152,7 @@ return {
   {
     'rose-pine/neovim',
     name = 'rose-pine',
-    lazy = true,
+    lazy = false,
     opts = {
       variant = 'auto',
       styles = {
@@ -163,7 +163,7 @@ return {
 
   {
     'folke/tokyonight.nvim',
-    lazy = true,
+    lazy = false,
     opts = {
       styles = {
         comments = { italic = false },
@@ -174,7 +174,7 @@ return {
   {
     'ellisonleao/gruvbox.nvim',
     name = 'gruvbox',
-    lazy = true,
+    lazy = false,
     opts = {
       contrast = 'hard',
       italic = {
@@ -188,7 +188,7 @@ return {
   {
     'sainnhe/gruvbox-material',
     name = 'gruvbox-material',
-    lazy = true,
+    lazy = false,
     config = function()
       vim.g.gruvbox_material_background = 'hard'
       vim.g.gruvbox_material_enable_italic = 1
@@ -198,7 +198,7 @@ return {
   {
     'EdenEast/nightfox.nvim',
     name = 'nightfox',
-    lazy = true,
+    lazy = false,
     opts = {
       options = {
         styles = {
