@@ -31,6 +31,9 @@ return {
   'folke/snacks.nvim',
   priority = 1000,
   lazy = false,
+  keys = {
+    { '<C-\\>', function() Snacks.terminal(nil, { win = { position = 'float' } }) end, desc = 'Toggle terminal' },
+  },
   opts = {
     bigfile = { enabled = true, size = 1.5 * 1024 * 1024 },
     dashboard = {
@@ -50,5 +53,13 @@ return {
         { section = 'startup', align = 'center' },
       },
     },
+    indent = {
+      enabled = true,
+      animate = { enabled = false },
+    },
+    scroll = {
+      enabled = false,
+    },
+    terminal = { enabled = true },
   },
 }

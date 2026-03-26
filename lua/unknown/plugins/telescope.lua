@@ -50,6 +50,7 @@ return {
           '--exclude', '.tox',
           '--exclude', 'vendor',
           '--exclude', 'bower_components',
+          '--exclude', 'release',
         },
       }
     end, desc = 'Find Files (Ctrl+P)' },
