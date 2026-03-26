@@ -32,7 +32,7 @@ return {
   priority = 1000,
   lazy = false,
   keys = {
-    { '<C-\\>', function() Snacks.terminal(nil, { win = { position = 'float' } }) end, desc = 'Toggle terminal' },
+    { '<C-\\>', function() Snacks.terminal(nil, { win = { position = 'float', border = 'rounded' } }) end, desc = 'Toggle terminal' },
   },
   opts = {
     bigfile = { enabled = true, size = 1.5 * 1024 * 1024 },
