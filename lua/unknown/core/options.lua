@@ -1,10 +1,13 @@
 -- Core options
--- Use pwsh with minimal config for faster startup
 
-vim.o.shell = 'pwsh'
-vim.o.shellcmdflag = '-NoLogo -NoProfile -Command'
-vim.o.shellquote = ''
-vim.o.shellxquote = ''
+-- Windows: use pwsh with minimal config for faster startup
+-- Linux/macOS: Neovim defaults to $SHELL (bash/zsh) — no config needed
+if vim.fn.has 'win32' == 1 then
+  vim.o.shell = 'pwsh'
+  vim.o.shellcmdflag = '-NoLogo -NoProfile -Command'
+  vim.o.shellquote = ''
+  vim.o.shellxquote = ''
+end
 
 -- Spell check
 vim.opt.spell = true
