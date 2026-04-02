@@ -3,6 +3,7 @@
 
 return {
   'stevearc/conform.nvim',
+  dependencies = { 'mason-org/mason.nvim' },
   event = { 'BufWritePre' },
   cmd = { 'ConformInfo' },
   keys = {
@@ -16,7 +17,7 @@ return {
     },
   },
   opts = {
-    notify_on_error = false,
+    notify_on_error = true,
     format_on_save = false, -- Disabled auto-format on save; use <leader>f to format manually
     formatters_by_ft = {
       lua = { 'stylua' },
