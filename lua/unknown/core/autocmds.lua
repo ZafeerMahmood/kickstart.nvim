@@ -39,9 +39,11 @@ end, { desc = 'Toggle transparent background' })
 
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = vim.api.nvim_create_augroup('transparent-bg', { clear = true }),
-  callback = function() set_transparent(true) end,
+  callback = function()
+    if not vim.g.neovide then set_transparent(true) end
+  end,
 })
-set_transparent(true)
+if not vim.g.neovide then set_transparent(true) end
 
 -- Highlight on yank
 vim.api.nvim_create_autocmd('TextYankPost', {
