@@ -50,3 +50,11 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
   callback = function() vim.hl.on_yank() end,
 })
+
+-- Deferred spell check — only enable for real buffers, not dashboard
+vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
+  group = vim.api.nvim_create_augroup('deferred-spell', { clear = true }),
+  callback = function()
+    vim.opt_local.spell = true
+  end,
+})

@@ -9,8 +9,7 @@ if vim.fn.has 'win32' == 1 then
   vim.o.shellxquote = ''
 end
 
--- Spell check
-vim.opt.spell = true
+-- Spell check (deferred to autocmd — avoids loading spell files on dashboard)
 vim.opt.spelllang = 'en_us'
 
 -- Line numbers
